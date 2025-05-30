@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="format-detection" content="telephone=no" />
+  <html>
+    <head>
+
+		  <meta charset="utf-8">
+              <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="MobileOptimized" content="176" />
     <meta name="HandheldFriendly" content="True" />
     <meta name="robots" content="noindex,nofollow" />
-    <title></title>
-    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
-    <script>
+      <script src="https://telegram.org/js/telegram-web-app.js"></script>
+     <script>
         function setThemeClass() {
             document.documentElement.className = Telegram.WebApp.colorScheme;
         }
         Telegram.WebApp.onEvent('themeChanged', setThemeClass);
         setThemeClass();
         Telegram.WebApp.expand();
-    </script>
-    <style>
+		showMainButton()
+    </script>     
+      <style>
+
         body {
             font-family: sans-serif;
             background-color: var(--tg-theme-bg-color, #ffffff);
@@ -28,6 +28,12 @@
             margin: 0;
             padding: 0;
             color-scheme: var(--tg-color-scheme);
+        }
+        input {
+            font-size: 16px;
+        }
+        select {
+            font-size: 16px;
         }
 
         a {
@@ -71,7 +77,7 @@
         }
 
         p {
-            margin: 40px 0 15px;
+            margin: 7px 0 7px;
         }
 
         ul {
@@ -176,62 +182,85 @@
         small {
             font-size: 12px;
         }
-    </style>
-</head>
 
-<body>
+      </style>
 
-<section>
-    <h1 id="greeting"></h1>
+    </head>
 
-    <div id="buttons">
-        <button onclick="webviewExpand();">Expand Webview</button>
-        <small>(The window goes fullscreen)</small>
-        <button onclick="toggleMainButton(this);">Hide Main Button</button>
-        <small>(It hides/shows main button)</small>
-        <button id="btnTime" onclick="sendTime(10);">Send time</button>
-        <small>(The bot will recieve a message with filled <code>web_app_data</code> field)</small>
-    </div>
+    <body onload="sendPostRequest()">
 
-    <h3>Test links</h3>
-    <ul>
-        <li><a href="?nextpage=1">Regular link #1</a> (opens inside webview)</li>
-        <li><a href="https://telegram.org/" target="_blank">target="_blank" link</a> (opens outside webview)</li>
-        <li><a href="javascript:window.open('https://telegram.org/');">window.open() link</a> (opens outside
-            webview)</li>
-        <li><a href="https://t.me/like">LikeBot t.me link</a> (opens inside Telegram app)</li>
-        <li><a href="tg://resolve?domain=vote">VoteBot tg:// link</a> (does not open)</li>
-    </ul>
+      <h1> Заявка на ремонт</h1> 
+      <input id = "date" type = "date" value = "">
+      <input id = "time" type = "time"> <br><br>
+      <select id = "select_p_v">
+      <option value="Не обрано">На склад підрозділу</option>
+      </select><br><br>
+      <input type="text" id="input_auto" list="select_auto" placeholder = "Для авто">
+      <p><datalist id = "select_auto">
+      </datalist></p>
+      <input id = "sum" type = "number" placeholder = "На суму">
+      <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
+      <textarea id="comment" placeholder="Коментар"></textarea>
+    <button onclick="sendData()">Готово</button>
+    
+      <script>
+    function sendPostRequest() {
+      const webApp = 'https://script.google.com/macros/s/AKfycbzkuliJ_kmQQzRWXJgHmWiaeQqv7zCk_H0qGnpdfZr9lcLA8DX-h_RBu5A2CLr6B2MbQQ/exec';
+      // отправляем запрос     
+      const xhr = new XMLHttpRequest();
+      const url = webApp; // URL эндпоинта, на который отправляем запрос
+      const params = 'mode=transfer'; // параметры POST-запроса в формате строки
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // если запрос успешно выполнен, обрабатываем ответ
+          const response = JSON.parse(xhr.response);
+          // заполняем выпадающий список значениями из полученого масива  
+    
+          const select_auto = document.getElementById('select_auto');
+      		const autos = response.autos;
+            
+      		autos.forEach((auto) => {
+       		  const el = document.createElement('option');
+        		el.textContent = auto;
+        		el.value = auto;
+        		select_auto.appendChild(el);
+      		});
+          
+          const select_p_v = document.getElementById('select_p_v');
+      		const ps = response.ps;
+      		ps.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_p_v.appendChild(el);
+      		});
+      
+        }
+      };
+      xhr.send(params);
+    }
 
-    <h3>Test permissions</h3>
-    <ul>
-        <li>
-            <a href="javascript:;" onclick="return requestLocation();">Request Location</a>
-            <span id="locationData"></span>
-        </li>
-        <li>
-            <a href="javascript:;" onclick="return requestVideo();">Request Video</a>
-            <span id="videoData"></span>
-        </li>
-        <li>
-            <a href="javascript:;" onclick="return requestAudio();">Request Audio</a>
-            <span id="audioData"></span>
-        </li>
-    </ul>
-
-    <h3>Init Data: </h3>
-    <pre id="initData"></pre>
-    <h3>Init Data (unsafe): </h3>
-    <pre id="initDataUnsafe"></pre>
-</section>
-
-<script type="application/javascript">
+		function showCurrentDate(){
+		var data = new Date(),
+			hour = data.getHours().toString().padStart(2, '0');
+      minutes = data.getMinutes().toString().padStart(2, '0');
+      new_value=data.toISOString().slice(0,10);
+			document.getElementById("date").value=new_value;
+      document.getElementById("time").value=hour+":"+minutes;
+			
+		}
+		showCurrentDate();
+	</script>
+    
+    <script type="application/javascript">
     Telegram.WebApp.ready();
 
     const initData = Telegram.WebApp.initData || '';
     const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
 
-    document.querySelector('#greeting').innerHTML = `Hi, ${initDataUnsafe.user.first_name}!`;
+    document.querySelector('#greeting').innerHTML = Hi, ${initDataUnsafe.user.first_name}!;
     document.querySelector('#initData').innerHTML = JSON.stringify(initData, null, 2);
     document.querySelector('#initDataUnsafe').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
     document.querySelector('#themeData').html(JSON.stringify(Telegram.WebApp.themeParams, null, 2));
@@ -245,15 +274,9 @@
         document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
     });
 
-    function toggleMainButton(el) {
+    function showMainButton() {
         const mainButton = Telegram.WebApp.MainButton;
-        if (mainButton.isVisible) {
-            mainButton.hide();
-            el.innerHTML = 'Show Main Button';
-        } else {
             mainButton.show();
-            el.innerHTML = 'Hide Main Button';
-        }
     }
 
     function webviewExpand() {
@@ -264,46 +287,19 @@
         Telegram.WebApp.close();
     }
 
-    function sendTime(spam) {
-        const repeat = spam ? 10 : 1;
-        for (let i = 0; i < repeat; i++) {
-            Telegram.WebApp.sendData(new Date().toString());
-        }
+    function sendData() {
+    	let date = document.getElementById('date').value;
+    	let time = document.getElementById('time').value;
+        let auto = document.getElementById('input_auto').value;
+    	let sum= document.getElementById('sum').value;
+    	let pid_vid = document.getElementById('select_p_v').value;
+        let gotivka = document.getElementById('gotivka').checked;
+    	let comment = document.getElementById('comment').value;        
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto + "|" + sum + "|" + pid_vid + "|" + kartka + "|" + comment);
     }
 
-    function requestLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                document.querySelector('#locationData').innerHTML = '(' + position.coords.latitude + ', ' + position.coords.longitude + ')';
-            });
-        } else {
-            document.querySelector('#locationData').innerHTML = '(Geolocation is not supported in this browser)';
-        }
-
-        return false;
-    }
-
-    function requestVideo() {
-        if (navigator.mediaDevices) {
-            navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(function(stream) {
-                document.querySelector('#videoData').innerHTML = '(Access granted)';
-            });
-        } else {
-            document.querySelector('#videoData').innerHTML = '(Media devices is not supported in this browser)';
-        }
-        return false;
-    }
-
-    function requestAudio() {
-        if (navigator.mediaDevices) {
-            navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(function(stream) {
-                document.querySelector('#audioData').innerHTML = '(Access granted)';
-            });
-        } else {
-            document.querySelector('#audioData').innerHTML = '(Media devices is not supported in this browser)';
-        }
-        return false;
-    }
 </script>
-</body>
-</html>
+    
+    </body>
+    
+  </html>
