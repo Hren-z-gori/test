@@ -189,17 +189,25 @@
 
     <body onload="sendPostRequest()">
 
-      <h1> Заявка на ремонт</h1> 
+      <h1> Передача авто</h1> 
       <input id = "date" type = "date" value = "">
-      <input id = "time" type = "time"> <br><br>
-      <select id = "select_p_v">
-      <option value="Не обрано">На склад підрозділу</option>
-      </select><br><br>
-      <input type="text" id="input_auto" list="select_auto" placeholder = "Для авто">
+      <input id = "time" type = "time"> <br>
+      <input type="text" id="input_auto" list="select_auto" placeholder = "Оберіть авто">
       <p><datalist id = "select_auto">
       </datalist></p>
-      <input id = "sum" type = "number" placeholder = "На суму">
-      <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
+      <input id = "odometr" type = "number" placeholder = "Покази одометра">
+      <p> <input id = "dizel" type = "number" placeholder = "Дизпаливо"> </p>
+      <input id = "benz" type = "number" placeholder = "Бензин">
+      <p> <input id = "gaz" type = "number" placeholder = "Газ"> </p>
+      <p> <input id = "pib_v" type = "text" placeholder = "Водій, що передає"> </p>
+      <select id = "select_p_v">
+      <option value="Не обрано">Підрозділ, що передає</option>
+      </select>
+      <p> <input id = "pib_o" type = "text" placeholder = "Водій, що отримує"> </p>
+      <select id = "select_p_o">
+      <option value="Не обрано">Підрозділ, що отримує</option>
+      </select>
+      <p>Передача паливної картки <input id = "kartka" type = "checkbox"> </p>
       <textarea id="comment" placeholder="Коментар"></textarea>
     <button onclick="sendData()">Готово</button>
     
@@ -235,6 +243,14 @@
         		el.textContent = p;
         		el.value = p;
         		select_p_v.appendChild(el);
+      		});
+
+          const select_p_o = document.getElementById('select_p_o');
+      		ps.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_p_o.appendChild(el);
       		});
       
         }
@@ -291,11 +307,17 @@
     	let date = document.getElementById('date').value;
     	let time = document.getElementById('time').value;
         let auto = document.getElementById('input_auto').value;
-    	let sum= document.getElementById('sum').value;
+    	let odometr = document.getElementById('odometr').value;
+        let dizel = document.getElementById('dizel').value;
+        let benz = document.getElementById("benz").value;
+    	let gaz = document.getElementById('gaz').value;
+        let pib_vid = document.getElementById("pib_v").value;
     	let pid_vid = document.getElementById('select_p_v').value;
-        let gotivka = document.getElementById('gotivka').checked;
+        let pib_otr = document.getElementById("pib_o").value;
+    	let pid_otr = document.getElementById('select_p_o').value;
+        let kartka = document.getElementById('kartka').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto + "|" + sum + "|" + pid_vid + "|" + kartka + "|" + comment);
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto + "|" + odometr + "|" + dizel + "|" + benz + "|" + gaz + "|" + pib_vid + "|" + pid_vid + "|" + pib_otr + "|" + pid_otr + "|" + kartka + "|" + comment);
     }
 
 </script>
