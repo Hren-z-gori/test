@@ -16,7 +16,7 @@
         Telegram.WebApp.onEvent('themeChanged', setThemeClass);
         setThemeClass();
         Telegram.WebApp.expand();
-
+		showMainButton()
     </script>     
       <style>
 
@@ -187,7 +187,7 @@
 
     </head>
 
-    <body>
+    <body onload="sendPostRequest()">
 
       <h1> Заявка на ремонт</h1> 
       <input id = "date" type = "date" value = "">
