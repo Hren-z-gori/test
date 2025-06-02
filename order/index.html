@@ -16,7 +16,7 @@
         Telegram.WebApp.onEvent('themeChanged', setThemeClass);
         setThemeClass();
         Telegram.WebApp.expand();
-		showMainButton()
+
     </script>     
       <style>
 
@@ -202,7 +202,7 @@
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
       <textarea id="comment" placeholder="Коментар"></textarea>
-    <button onclick="sendData()">Готово</button>
+      <button onclick="sendData()">Готово</button>
     
       <script>
     function sendPostRequest() {
