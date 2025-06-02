@@ -259,7 +259,7 @@
     Telegram.WebApp.ready();
 
     const initData = Telegram.WebApp.initData || '';
-    const initDataUnsafe = Telegram.WebApp.initDataUnsafe.user.id || {};
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
 
     Telegram.WebApp.MainButton
         .setText('CLOSE WEBVIEW')
@@ -292,7 +292,7 @@
         let gotivka = document.getElementById('gotivka').checked;
 	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + initDataUnsafe);
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + initData);
     }
 
 </script>
