@@ -290,7 +290,7 @@
     	let pid_vid = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData("|");
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + pid_vid + "|" + gotivka + "|" + comment);
     }
 
 </script>
