@@ -196,8 +196,8 @@
       <option value="Не обрано">На склад підрозділу</option>
       </select><br><br>
       <input type="text" id="input_auto" list="select_auto" placeholder = "Для авто">
-      <p><datalist id = "select_auto">
-      </datalist></p>
+      <datalist id = "select_auto">
+      </datalist>
       <input id = "sum" type = "number" placeholder = "На суму">
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
       <textarea id="comment" placeholder="Коментар"></textarea>
@@ -259,11 +259,6 @@
 
     const initData = Telegram.WebApp.initData || '';
     const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
-
-    document.querySelector('#greeting').innerHTML = Hi, ${initDataUnsafe.user.first_name}!;
-    document.querySelector('#initData').innerHTML = JSON.stringify(initData, null, 2);
-    document.querySelector('#initDataUnsafe').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
-    document.querySelector('#themeData').html(JSON.stringify(Telegram.WebApp.themeParams, null, 2));
 
     Telegram.WebApp.MainButton
         .setText('CLOSE WEBVIEW')
