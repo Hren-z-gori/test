@@ -259,7 +259,7 @@
     Telegram.WebApp.ready();
 
     const initData = Telegram.WebApp.initData || '';
-    const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe.user.id || {};
 
     Telegram.WebApp.MainButton
         .setText('CLOSE WEBVIEW')
