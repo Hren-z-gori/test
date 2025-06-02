@@ -193,23 +193,24 @@
       <input id = "date" type = "date" value = "">
       <input id = "time" type = "time"> <br><br>
       <select id = "select_p_v">
-      <option value="Не обрано">На склад підрозділу</option>
+      <option value="Не обрано">На склад </option>
       </select><br><br>
       <input type="text" id="input_auto" list="select_auto" placeholder = "Для авто">
       <datalist id = "select_auto">
       </datalist><br>
       <input id = "sum" type = "number" placeholder = "На суму">
+      <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
       <textarea id="comment" placeholder="Коментар"></textarea>
     <button onclick="sendData()">Готово</button>
     
       <script>
     function sendPostRequest() {
-      const webApp = 'https://script.google.com/macros/s/AKfycbwDo9azZL3043Idmal675MEmoQT6W_NHKP_I-C3xORCPtu5DlhVou9eU4cY1d6er1kZKw/exec';
+      const webApp = 'https://script.google.com/macros/s/AKfycbzsRwbrXYnlFUccqemXQzKLKwjELASOzlst8Pthb9835U6H57jLYxf4fBYh_-2TkTKvKw/exec';
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = 'mode=buy'; // параметры POST-запроса в формате строки
+      const params = 'mode=order'; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
@@ -286,11 +287,12 @@
     	let date = document.getElementById('date').value;
     	let time = document.getElementById('time').value;
         let auto = document.getElementById('input_auto').value;
-    	let sum= document.getElementById('sum').value;
-    	let pid_vid = document.getElementById('select_p_v').value;
+    	let sum = document.getElementById('sum').value;
+    	let sklad = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
+	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + pid_vid + "|" + gotivka + "|" + comment);
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment);
     }
 
 </script>
