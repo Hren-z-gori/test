@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+
+		  <meta charset="utf-8">
+              <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="MobileOptimized" content="176" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="robots" content="noindex,nofollow" />
+      <script src="https://telegram.org/js/telegram-web-app.js"></script>
+     <script>
+        function setThemeClass() {
+            document.documentElement.className = Telegram.WebApp.colorScheme;
+        }
+        Telegram.WebApp.onEvent('themeChanged', setThemeClass);
+        setThemeClass();
+        Telegram.WebApp.expand();
+		showMainButton()
+    </script>     
+      <style>
+
+        body {
+            font-family: sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #222222);
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            color-scheme: var(--tg-color-scheme);
+        }
+        input {
+            font-size: 16px;
+        }
+        select {
+            font-size: 16px;
+        }
+
+        a {
+            color: var(--tg-theme-link-color, #2678b6);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            font-size: 14px;
+            margin: 15px 0;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--tg-theme-button-color, #50a8eb);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: 0.6;
+            cursor: auto;
+            pointer-events: none;
+        }
+
+        button.close_btn {
+            /*position: fixed;*/
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            margin: 0;
+            padding: 16px 20px;
+            text-transform: uppercase;
+        }
+
+        section {
+            padding: 15px 15px 65px;
+            text-align: center;
+        }
+
+        p {
+            margin: 7px 0 7px;
+        }
+
+        ul {
+            text-align: left;
+        }
+
+        li {
+            color: var(--tg-theme-hint-color, #a8a8a8);
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 7px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, .07);
+            border-radius: 4px;
+            padding: 4px;
+            margin: 7px 0;
+            word-break: break-all;
+            word-break: break-word;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        .dark pre {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        .hint {
+            font-size: .8em;
+            color: var(--tg-theme-hint-color, #a8a8a8);
+        }
+
+        .ok {
+            color: green;
+        }
+
+        .err {
+            color: red;
+        }
+
+        #fixed_wrap {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            transform: translateY(100vh);
+        }
+
+        .viewport_border,
+        .viewport_stable_border {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: var(--tg-viewport-height, 100vh);
+            pointer-events: none;
+        }
+
+        .viewport_stable_border {
+            height: var(--tg-viewport-stable-height, 100vh);
+        }
+
+        .viewport_border:before,
+        .viewport_stable_border:before {
+            content: attr(text);
+            display: inline-block;
+            position: absolute;
+            background: gray;
+            right: 0;
+            top: 0;
+            font-size: 7px;
+            padding: 2px 4px;
+            vertical-align: top;
+        }
+
+        .viewport_stable_border:before {
+            background: green;
+            left: 0;
+            right: auto;
+        }
+
+        .viewport_border:after,
+        .viewport_stable_border:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 2px dashed gray;
+        }
+
+        .viewport_stable_border:after {
+            border-color: green;
+        }
+
+        small {
+            font-size: 12px;
+        }
+
+      </style>
+
+    </head>
+
+    <body onload="sendPostRequest()">
+
+      <h1> Передача авто</h1> 
+      <input id = "date" type = "date" value = "">
+      <input id = "time" type = "time"> <br>
+      <input type="text" id="input_auto" list="select_auto" placeholder = "Оберіть авто">
+      <p><datalist id = "select_auto">
+      </datalist></p>
+      <input id = "odometr" type = "number" placeholder = "Покази одометра">
+      <p> <input id = "dizel" type = "number" placeholder = "Дизпаливо"> </p>
+      <input id = "benz" type = "number" placeholder = "Бензин">
+      <p> <input id = "gaz" type = "number" placeholder = "Газ"> </p>
+      <p> <input id = "pib_v" type = "text" placeholder = "Водій, що передає"> </p>
+      <select id = "select_p_v">
+      <option value="Не обрано">Підрозділ, що передає</option>
+      </select>
+      <p> <input id = "pib_o" type = "text" placeholder = "Водій, що отримує"> </p>
+      <select id = "select_p_o">
+      <option value="Не обрано">Підрозділ, що отримує</option>
+      </select>
+      <p>Передача паливної картки <input id = "kartka" type = "checkbox"> </p>
+      <textarea id="comment" placeholder="Коментар"></textarea>
+    <button onclick="sendData()">Готово</button>
+    
+      <script>
+    function sendPostRequest() {
+      const webApp = 'https://script.google.com/macros/s/AKfycbzkuliJ_kmQQzRWXJgHmWiaeQqv7zCk_H0qGnpdfZr9lcLA8DX-h_RBu5A2CLr6B2MbQQ/exec';
+      // отправляем запрос     
+      const xhr = new XMLHttpRequest();
+      const url = webApp; // URL эндпоинта, на который отправляем запрос
+      const params = 'mode=transfer'; // параметры POST-запроса в формате строки
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // если запрос успешно выполнен, обрабатываем ответ
+          const response = JSON.parse(xhr.response);
+          // заполняем выпадающий список значениями из полученого масива  
+    
+          const select_auto = document.getElementById('select_auto');
+      		const autos = response.autos;
+            
+      		autos.forEach((auto) => {
+       		  const el = document.createElement('option');
+        		el.textContent = auto;
+        		el.value = auto;
+        		select_auto.appendChild(el);
+      		});
+          
+          const select_p_v = document.getElementById('select_p_v');
+      		const ps = response.ps;
+      		ps.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_p_v.appendChild(el);
+      		});
+
+          const select_p_o = document.getElementById('select_p_o');
+      		ps.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_p_o.appendChild(el);
+      		});
+      
+        }
+      };
+      xhr.send(params);
+    }
+
+		function showCurrentDate(){
+		var data = new Date(),
+			hour = data.getHours().toString().padStart(2, '0');
+      minutes = data.getMinutes().toString().padStart(2, '0');
+      new_value=data.toISOString().slice(0,10);
+			document.getElementById("date").value=new_value;
+      document.getElementById("time").value=hour+":"+minutes;
+			
+		}
+		showCurrentDate();
+	</script>
+    
+    <script type="application/javascript">
+    Telegram.WebApp.ready();
+
+    const initData = Telegram.WebApp.initData || '';
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+
+    document.querySelector('#greeting').innerHTML = Hi, ${initDataUnsafe.user.first_name}!;
+    document.querySelector('#initData').innerHTML = JSON.stringify(initData, null, 2);
+    document.querySelector('#initDataUnsafe').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
+    document.querySelector('#themeData').html(JSON.stringify(Telegram.WebApp.themeParams, null, 2));
+
+    Telegram.WebApp.MainButton
+        .setText('CLOSE WEBVIEW')
+        .show()
+        .onClick(function(){ webviewClose(); });
+
+    Telegram.WebApp.onEvent('themeChanged', function() {
+        document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+    });
+
+    function showMainButton() {
+        const mainButton = Telegram.WebApp.MainButton;
+            mainButton.show();
+    }
+
+    function webviewExpand() {
+        Telegram.WebApp.expand();
+    }
+
+    function webviewClose() {
+        Telegram.WebApp.close();
+    }
+
+    function sendData() {
+    	let date = document.getElementById('date').value;
+    	let time = document.getElementById('time').value;
+        let auto = document.getElementById('input_auto').value;
+    	let odometr = document.getElementById('odometr').value;
+        let dizel = document.getElementById('dizel').value;
+        let benz = document.getElementById("benz").value;
+    	let gaz = document.getElementById('gaz').value;
+        let pib_vid = document.getElementById("pib_v").value;
+    	let pid_vid = document.getElementById('select_p_v').value;
+        let pib_otr = document.getElementById("pib_o").value;
+    	let pid_otr = document.getElementById('select_p_o').value;
+        let kartka = document.getElementById('kartka').checked;
+    	let comment = document.getElementById('comment').value;        
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto + "|" + odometr + "|" + dizel + "|" + benz + "|" + gaz + "|" + pib_vid + "|" + pid_vid + "|" + pib_otr + "|" + pid_otr + "|" + kartka + "|" + comment);
+    }
+
+</script>
+    
+    </body>
+    
+  </html>
