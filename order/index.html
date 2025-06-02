@@ -197,7 +197,7 @@
       </select><br><br>
       <input type="text" id="input_auto" list="select_auto" placeholder = "Для авто">
       <datalist id = "select_auto">
-      </datalist><br>
+      </datalist><br><br>
       <input id = "sum" type = "number" placeholder = "На суму">
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
@@ -292,7 +292,7 @@
         let gotivka = document.getElementById('gotivka').checked;
 	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment);
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + initData);
     }
 
 </script>
