@@ -188,7 +188,7 @@
 
     <body onload="sendPostRequest()">
 
-      <h1> Заявка на ремонт</h1> 
+      <h1> Заявка на ремонт 2</h1> 
       <input id = "date" type = "date" value = "">
       <input id = "time" type = "time"> <br><br>
       <select id = "select_p_v">
@@ -294,7 +294,7 @@
     	let pid_vid = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
     	let comment = document.getElementById('comment').value;        
-    	Telegram.WebApp.sendData(1);
+    	Telegram.WebApp.sendData("|");
     }
 
 </script>
