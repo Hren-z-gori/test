@@ -209,11 +209,11 @@
     function sendPostRequest() {
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get("user_id");
-      const webApp = 'https://script.google.com/macros/s/AKfycbzH1U7pSVHOsl8CNQvrI-OmShahXxcWOEM-qDt0X99pe4RjyeU9SlW5747RXxwJqy4jTg/exec';
+      const webApp = 'https://script.google.com/macros/s/AKfycby2f5zeiY4Uf2sBUO6ag2c-O_BPo8Fn9NNlcCESSq6eWVZHN4OiapiRMhDneu-XZSiTJA/exec';
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = 'mode=order&user_id=${userId}'; // параметры POST-запроса в формате строки
+      const params = `mode=order&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
