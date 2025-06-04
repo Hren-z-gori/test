@@ -295,7 +295,12 @@
         let gotivka = document.getElementById('gotivka').checked;
 	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;
-	let records = document.getElementById('records').value;     
+	let records = document.getElementById('records').value;
+	        // ❗ Проверка на пустое значение суммы
+    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        alert("Будь ласка, введіть суму!");
+        return; // Останавливаем выполнение функции
+    }
     	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + initData);
     }
 
