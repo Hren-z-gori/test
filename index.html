@@ -246,6 +246,15 @@
         		el.value = p;
         		select_p_v.appendChild(el);
       		});
+		
+          const select_pd = document.getElementById('select_pd');
+      		const pd = response.pd;
+      		pd.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_pd.appendChild(el);
+      		});		
       
         }
       };
@@ -297,9 +306,12 @@
     	let time = document.getElementById('time').value;
         let auto = document.getElementById('input_auto').value;
     	let sum = document.getElementById('sum').value;
+	let pid = document.getElementById('select_pd').value;
     	let sklad = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
 	let pdv = document.getElementById('pdv').checked;
+	let previous = document.getElementById('previous').checked;
+	let photo = document.getElementById('photo').checked;
     	let comment = document.getElementById('comment').value;
 	let records = document.getElementById('records').value;
 	    
@@ -310,15 +322,15 @@
 
     let hasError = false;
 
-    // Проверка суммы
-    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
-        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
-        document.getElementById('sum').style.border = '2px solid red';
+    // Проверка подразделения
+    if (!pid || pid === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        document.getElementById('select_pd').style.border = '2px solid red';
         hasError = true;
     } else {
-        document.getElementById('sum').style.border = '';
+        document.getElementById('select_pd').style.border = '';
     }
-
+	    
     // Проверка склада
     if (!sklad || sklad === 'Не обрано') {
         errorMessage.textContent = "Будь ласка, оберіть склад.";
@@ -327,7 +339,16 @@
     } else {
         document.getElementById('select_p_v').style.border = '';
     }
-
+	    
+    // Проверка суммы
+    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
+        document.getElementById('sum').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('sum').style.border = '';
+    }
+	    
     if (hasError) {
         errorMessage.style.display = 'block';
         return;
@@ -335,7 +356,7 @@
 
     // Всё ок — отправляем
 	    
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + initData);
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + pid + "|" + previous + "|" + photo);
     }
 
 </script>
