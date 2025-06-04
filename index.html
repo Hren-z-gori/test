@@ -192,8 +192,11 @@
       <h1> Заявка на ремонт</h1> 
       <input id = "date" type = "date" value = "">
       <input id = "time" type = "time"> <br><br>
+      <select id = "select_pd">
+      <option value="Не обрано">Оберіть підрозділ </option>
+      </select><br><br>
       <select id = "select_p_v">
-      <option value="Не обрано">На склад </option>
+      <option value="Не обрано">Оберіть склад </option>
       </select><br><br>
       <input type="text" id="input_auto" list="select_auto" placeholder = "Для техніки">
       <datalist id = "select_auto">
@@ -202,7 +205,10 @@
       <textarea id="records" placeholder="По рядкам рахунку"></textarea>
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
+      <p>Звіт по попередній заявкам здано<input id = "previous" type = "checkbox"> </p>
+      <p>Додати фото документу<input id = "photo" type = "checkbox"> </p>
       <textarea id="comment" placeholder="Коментар"></textarea>
+      <p id="error-message" style="color: red; display: none;"></p>
       <button onclick="sendData()">Готово</button>
     
       <script>
@@ -296,24 +302,38 @@
 	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;
 	let records = document.getElementById('records').value;
+	    
+    // Проверка
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
 
-	// ❗ Проверка суммы
-    	if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
-        	alert("Будь ласка, введіть суму!");
-        	document.getElementById('sum').style.border = '2px solid red';
-        	return;
-    	} else {
-        	document.getElementById('sum').style.border = ''; // убираем красную рамку если всё ок
-    	}
+    let hasError = false;
 
-    	// ❗ Проверка склада
-    	if (!sklad || sklad === 'Не обрано') {
-        	alert("Будь ласка, оберіть склад!");
-        	document.getElementById('select_p_v').style.border = '2px solid red';
-        	return;
-    	} else {
-        	document.getElementById('select_p_v').style.border = ''; // убираем красную рамку если всё ок
-    	}    
+    // Проверка суммы
+    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
+        document.getElementById('sum').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('sum').style.border = '';
+    }
+
+    // Проверка склада
+    if (!sklad || sklad === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        document.getElementById('select_p_v').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('select_p_v').style.border = '';
+    }
+
+    if (hasError) {
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Всё ок — отправляем
 	    
     	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + initData);
     }
