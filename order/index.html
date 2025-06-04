@@ -192,8 +192,11 @@
       <h1> Заявка на ремонт</h1> 
       <input id = "date" type = "date" value = "">
       <input id = "time" type = "time"> <br><br>
+      <select id = "select_pd">
+      <option value="Не обрано">Оберіть підрозділ </option>
+      </select><br><br>
       <select id = "select_p_v">
-      <option value="Не обрано">На склад </option>
+      <option value="Не обрано">Оберіть склад </option>
       </select><br><br>
       <input type="text" id="input_auto" list="select_auto" placeholder = "Для техніки">
       <datalist id = "select_auto">
@@ -202,16 +205,44 @@
       <textarea id="records" placeholder="По рядкам рахунку"></textarea>
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
+      <div id="previous-container" style="display: none;">
+      <p>Звіт по попередній заявкам здано <input id="previous" type="checkbox"></p>
+      </div>
+      <p>Додати фото документу <input id="photo" type="checkbox" checked></p>
       <textarea id="comment" placeholder="Коментар"></textarea>
+      <p id="error-message" style="color: red; display: none;"></p>
       <button onclick="sendData()">Готово</button>
     
       <script>
+	      
+  const gotivkaCheckbox = document.getElementById('gotivka');
+  const previousContainer = document.getElementById('previous-container');
+
+  gotivkaCheckbox.addEventListener('change', function () {
+    if (gotivkaCheckbox.checked) {
+      previousContainer.style.display = 'block';
+    } else {
+      previousContainer.style.display = 'none';
+      document.getElementById('previous').checked = false;
+    }
+  });
+
+  // Проверка при загрузке страницы — если уже выбрано
+  window.addEventListener('load', () => {
+    if (gotivkaCheckbox.checked) {
+      previousContainer.style.display = 'block';
+    }
+  });
+
+	      
     function sendPostRequest() {
-      const webApp = 'https://script.google.com/macros/s/AKfycbzH1U7pSVHOsl8CNQvrI-OmShahXxcWOEM-qDt0X99pe4RjyeU9SlW5747RXxwJqy4jTg/exec';
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("user_id");
+      const webApp = 'https://script.google.com/macros/s/AKfycbwc2bTagSty3lSfWjBXIBhMeN4Mb0fcf4DfS_0vskavkCBu6zGuPx4WmJ4Sh3x_szkliQ/exec';
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = 'mode=order'; // параметры POST-запроса в формате строки
+      const params = `mode=order&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
@@ -238,6 +269,15 @@
         		el.value = p;
         		select_p_v.appendChild(el);
       		});
+		
+          const select_pd = document.getElementById('select_pd');
+      		const pd = response.pd;
+      		pd.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_pd.appendChild(el);
+      		});		
       
         }
       };
@@ -289,12 +329,57 @@
     	let time = document.getElementById('time').value;
         let auto = document.getElementById('input_auto').value;
     	let sum = document.getElementById('sum').value;
+	let pid = document.getElementById('select_pd').value;
     	let sklad = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
 	let pdv = document.getElementById('pdv').checked;
+	let previous = document.getElementById('previous').checked;
+	let photo = document.getElementById('photo').checked;
     	let comment = document.getElementById('comment').value;
-	let records = document.getElementById('records').value;     
-    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + initData);
+	let records = document.getElementById('records').value;
+	    
+    // Проверка
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
+
+    let hasError = false;
+    
+    // Проверка суммы
+    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
+        document.getElementById('sum').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('sum').style.border = '';
+    }
+
+    // Проверка склада
+    if (!sklad || sklad === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        document.getElementById('select_p_v').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('select_p_v').style.border = '';
+    }
+
+    // Проверка подразделения
+    if (!pid || pid === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        document.getElementById('select_pd').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('select_pd').style.border = '';
+    }
+		    	    
+    if (hasError) {
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Всё ок — отправляем
+	    
+    	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + pid + "|" + previous + "|" + photo);
     }
 
 </script>
