@@ -213,11 +213,13 @@
     
       <script>
     function sendPostRequest() {
-      const webApp = 'https://script.google.com/macros/s/AKfycbzkuliJ_kmQQzRWXJgHmWiaeQqv7zCk_H0qGnpdfZr9lcLA8DX-h_RBu5A2CLr6B2MbQQ/exec';
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("user_id");    
+      const webApp = 'https://script.google.com/macros/s/AKfycbwc2bTagSty3lSfWjBXIBhMeN4Mb0fcf4DfS_0vskavkCBu6zGuPx4WmJ4Sh3x_szkliQ/exec';
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = 'mode=transfer'; // параметры POST-запроса в формате строки
+      const params = `mode=transfer&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
