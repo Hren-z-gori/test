@@ -296,11 +296,25 @@
 	let pdv = document.getElementById('pdv').checked;
     	let comment = document.getElementById('comment').value;
 	let records = document.getElementById('records').value;
-	        // ❗ Проверка на пустое значение суммы
-    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
-        alert("Будь ласка, введіть суму!");
-        return; // Останавливаем выполнение функции
-    }
+
+	// ❗ Проверка суммы
+    	if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        	alert("Будь ласка, введіть суму!");
+        	document.getElementById('sum').style.border = '2px solid red';
+        	return;
+    	} else {
+        	document.getElementById('sum').style.border = ''; // убираем красную рамку если всё ок
+    	}
+
+    	// ❗ Проверка склада
+    	if (!sklad || sklad === 'Не обрано') {
+        	alert("Будь ласка, оберіть склад!");
+        	document.getElementById('select_p_v').style.border = '2px solid red';
+        	return;
+    	} else {
+        	document.getElementById('select_p_v').style.border = ''; // убираем красную рамку если всё ок
+    	}    
+	    
     	Telegram.WebApp.sendData(date + "|" + time + "|" + auto  + "|" + sum  + "|" + sklad + "|" + gotivka + "|"  + pdv + "|" + comment + "|" + records + "|" + initData);
     }
 
