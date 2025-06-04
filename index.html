@@ -205,13 +205,36 @@
       <textarea id="records" placeholder="По рядкам рахунку"></textarea>
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
-      <p>Звіт по попередній заявкам здано<input id = "previous" type = "checkbox"> </p>
-      <p>Додати фото документу<input id = "photo" type = "checkbox"> </p>
+      <div id="previous-container" style="display: none;">
+      <p>Звіт по попередній заявкам здано <input id="previous" type="checkbox"></p>
+      </div>
+      <p>Додати фото документу <input id="photo" type="checkbox" checked></p>
       <textarea id="comment" placeholder="Коментар"></textarea>
       <p id="error-message" style="color: red; display: none;"></p>
       <button onclick="sendData()">Готово</button>
     
       <script>
+	      
+  const gotivkaCheckbox = document.getElementById('gotivka');
+  const previousContainer = document.getElementById('previous-container');
+
+  gotivkaCheckbox.addEventListener('change', function () {
+    if (gotivkaCheckbox.checked) {
+      previousContainer.style.display = 'block';
+    } else {
+      previousContainer.style.display = 'none';
+      document.getElementById('previous').checked = false;
+    }
+  });
+
+  // Проверка при загрузке страницы — если уже выбрано
+  window.addEventListener('load', () => {
+    if (gotivkaCheckbox.checked) {
+      previousContainer.style.display = 'block';
+    }
+  });
+
+	      
     function sendPostRequest() {
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get("user_id");
@@ -321,6 +344,24 @@
     errorMessage.textContent = '';
 
     let hasError = false;
+    
+    // Проверка суммы
+    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
+        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
+        document.getElementById('sum').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('sum').style.border = '';
+    }
+
+    // Проверка склада
+    if (!sklad || sklad === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        document.getElementById('select_p_v').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('select_p_v').style.border = '';
+    }
 
     // Проверка подразделения
     if (!pid || pid === 'Не обрано') {
@@ -330,25 +371,7 @@
     } else {
         document.getElementById('select_pd').style.border = '';
     }
-	    
-    // Проверка склада
-    if (!sklad || sklad === 'Не обрано') {
-        errorMessage.textContent = "Будь ласка, оберіть склад.";
-        document.getElementById('select_p_v').style.border = '2px solid red';
-        hasError = true;
-    } else {
-        document.getElementById('select_p_v').style.border = '';
-    }
-	    
-    // Проверка суммы
-    if (!sum || sum.trim() === '' || parseFloat(sum) === 0) {
-        errorMessage.textContent = "Будь ласка, введіть коректну суму.";
-        document.getElementById('sum').style.border = '2px solid red';
-        hasError = true;
-    } else {
-        document.getElementById('sum').style.border = '';
-    }
-	    
+		    	    
     if (hasError) {
         errorMessage.style.display = 'block';
         return;
