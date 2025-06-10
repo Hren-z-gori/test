@@ -231,7 +231,7 @@ function sendData() {
         operation: operation,
         numpp: numpp,
         comment: comment,
-        initData: Telegram.WebApp.initData || ''
+        initData: Telegram.WebApp.initDataUnsafe  || ''
     };
 
     fetch(webApp, {
