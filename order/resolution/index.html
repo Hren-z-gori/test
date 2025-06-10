@@ -218,22 +218,41 @@
         Telegram.WebApp.close();
     }
 
-    function sendData() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const bot = urlParams.get("bot");
-      const operation = urlParams.get("operation");
-      const numpp = urlParams.get("numpp");
-    	let comment = document.getElementById('comment').value;
-      const webApp = 'https://script.google.com/macros/s/AKfycbwi4TRMwSh-wccoOCymXkSB56kgREB9CNUcRQ_TWWUUXIqxar7ocapypCqJUaHA8vSl/exec';
-      // отправляем запрос     
-      const xhr = new XMLHttpRequest();
-      const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = `mode=order&bot=${bot}&operation=${operation}&numpp=${numpp}&comment=${comment}&initData=${initData}`; // параметры POST-запроса в формате строки
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.send(params);
-      webviewClose()
-    }
+function sendData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bot = urlParams.get("bot");
+    const operation = urlParams.get("operation");
+    const numpp = urlParams.get("numpp");
+    let comment = document.getElementById('comment').value;
+    const webApp = 'https://script.google.com/macros/s/AKfycbwt4PGnZAfbRQTHnXwWckLcZXgoW-BXsYprPH2zfvxOIh7l0vGn26c8F9ttP3VMdwvh/exec';
+
+    const params = {
+        mode: 'order',
+        bot: bot,
+        operation: operation,
+        numpp: numpp,
+        comment: comment,
+        initData: Telegram.WebApp.initData || ''
+    };
+
+    fetch(webApp, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(params).toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        webviewClose();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        webviewClose();
+    });
+}
+
 
 </script>
     
