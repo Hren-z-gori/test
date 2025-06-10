@@ -224,14 +224,14 @@ function sendData() {
     const operation = urlParams.get("operation");
     const numpp = urlParams.get("numpp");
     let comment = document.getElementById('comment').value;
-    const webApp = 'https://script.google.com/macros/s/AKfycbxVW1Fh4sWeX7DS13iaCTgzOkzmCrv6TdRHSPlzCHsCTTrIJglV8QfLv48FYaE4k6xz/exec';
+    const webApp = 'https://script.google.com/macros/s/AKfycbz6AzQ7XiSk87Ro0XMah1oEIoFR79aDhbWaJPuYnR915CVCNeJ-dh0JyuQdddrbD8g/exec';
 
     const params = {
         bot: bot,
         operation: operation,
         numpp: numpp,
         comment: comment,
-        initData: Telegram.WebApp.initDataUnsafe  || ''
+        initData: Telegram.WebApp.initDataUnsafe.user.id  || ''
     };
 
     fetch(webApp, {
