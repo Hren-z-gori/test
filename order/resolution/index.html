@@ -223,36 +223,41 @@ function sendData() {
     const bot = urlParams.get("bot");
     const operation = urlParams.get("operation");
     const numpp = urlParams.get("numpp");
-    let comment = document.getElementById('comment').value;
-    const webApp = 'https://script.google.com/macros/s/AKfycbwDlfS4GuamOmGVsastJG6cGqhNfdciKDmQGPSEqQ8fyqRLrIo4af-zj6tTk20wh06l/exec';
+    const comment = document.getElementById('comment').value;
 
-    const params = {
+    if (!comment.trim()) {
+        const errorEl = document.getElementById('error-message');
+        errorEl.innerText = 'Комментарий не может быть пустым!';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    const webApp = 'https://script.google.com/macros/s/AKfycbwt4PGnZAfbRQTHnXwWckLcZXgoW-BXsYprPH2zfvxOIh7l0vGn26c8F9ttP3VMdwvh/exec';
+
+    const params = new URLSearchParams({
         mode: 'order',
-        bot: bot,
-        operation: operation,
-        numpp: numpp,
-        comment: comment,
+        bot,
+        operation,
+        numpp,
+        comment,
         initData: Telegram.WebApp.initData || ''
-    };
+    });
 
+    // Просто запускаем fetch, не ждем ответа
     fetch(webApp, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: new URLSearchParams(params).toString()
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        webviewClose();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        webviewClose();
+        body: params.toString()
+    }).catch((err) => {
+        // Ошибки можно логировать, если нужно
+        console.error('Ошибка отправки:', err);
     });
-}
 
+    // Мгновенно закрываем WebView
+    webviewClose();
+}
 
 </script>
     
