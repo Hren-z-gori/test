@@ -198,11 +198,22 @@
       <select id = "select_p_v">
       <option value="Не обрано">Оберіть склад </option>
       </select><br><br>
-      <input type="text" id="input_auto" list="select_auto" placeholder = "Для техніки">
-      <datalist id = "select_auto">
-      </datalist><br><br>
-      <input id = "sum" type = "number" placeholder = "На суму">
-      <textarea id="records" placeholder="По рядкам рахунку"></textarea>
+	    
+<table id="items-table" style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Техніка</th>
+      <th>Сума</th>
+      <th>Рахунок</th>
+    </tr>
+  </thead>
+  <tbody id="items-body">
+    <!-- Строки добавляются скриптом -->
+  </tbody>
+</table>
+<p><strong>Загальна сума:</strong> <span id="total-sum">0</span> грн</p>
+<datalist id="select_auto"></datalist>
+
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
       <div id="previous-container" style="display: none;">
@@ -324,11 +335,82 @@
         Telegram.WebApp.close();
     }
 
+function createRow(auto = '', sum = '', record = '') {
+    const tbody = document.getElementById('items-body');
+    const row = document.createElement('tr');
+
+    const autoCell = document.createElement('td');
+    const autoInput = document.createElement('input');
+    autoInput.setAttribute('list', 'select_auto');
+    autoInput.type = 'text';
+    autoInput.value = auto;
+    autoInput.placeholder = 'Техніка';
+    autoInput.style.width = '100%';
+    autoCell.appendChild(autoInput);
+
+    const sumCell = document.createElement('td');
+    const sumInput = document.createElement('input');
+    sumInput.type = 'number';
+    sumInput.min = '0';
+    sumInput.step = 'any';
+    sumInput.value = sum;
+    sumInput.placeholder = 'Сума';
+    sumInput.style.width = '100%';
+    sumInput.addEventListener('input', updateTotalSum);
+    sumCell.appendChild(sumInput);
+
+    const recordCell = document.createElement('td');
+    const recordInput = document.createElement('textarea');
+    recordInput.placeholder = 'Рядок рахунку';
+    recordInput.style.width = '100%';
+    recordInput.rows = 1;
+    recordInput.value = record;
+    recordCell.appendChild(recordInput);
+
+    row.appendChild(autoCell);
+    row.appendChild(sumCell);
+    row.appendChild(recordCell);
+    tbody.appendChild(row);
+
+    // Добавляем новую строку, если это последняя
+    autoInput.addEventListener('input', handleAutoAddRow);
+    sumInput.addEventListener('input', handleAutoAddRow);
+    recordInput.addEventListener('input', handleAutoAddRow);
+}
+
+function handleAutoAddRow() {
+    const rows = document.querySelectorAll('#items-body tr');
+    const lastRow = rows[rows.length - 1];
+    const inputs = lastRow.querySelectorAll('input, textarea');
+    const filled = Array.from(inputs).some(input => input.value.trim() !== '');
+
+    if (filled) {
+        // Удалить обработчики, чтобы не дублировались
+        inputs.forEach(input => input.removeEventListener('input', handleAutoAddRow));
+        createRow(); // Добавить новую строку
+    }
+}
+
+function updateTotalSum() {
+    let total = 0;
+    document.querySelectorAll('#items-body input[type="number"]').forEach(input => {
+        const value = parseFloat(input.value);
+        if (!isNaN(value)) total += value;
+    });
+    document.getElementById('total-sum').textContent = total.toFixed(2);
+}
+
+// Инициализировать таблицу при загрузке
+window.addEventListener('load', () => {
+    createRow();
+});
+	    
+	    
     function sendData() {
     	let date = document.getElementById('date').value;
     	let time = document.getElementById('time').value;
-        let auto = document.getElementById('input_auto').value;
-    	let sum = document.getElementById('sum').value;
+
+
 	let pid = document.getElementById('select_pd').value;
     	let sklad = document.getElementById('select_p_v').value;
         let gotivka = document.getElementById('gotivka').checked;
@@ -336,7 +418,21 @@
 	let previous = document.getElementById('previous').checked;
 	let photo = document.getElementById('photo').checked;
     	let comment = document.getElementById('comment').value;
-	let records = document.getElementById('records').value;
+
+	    let auto = [];
+let sum = [];
+let records = [];
+document.querySelectorAll('#items-body tr').forEach(row => {
+    const inputs = row.querySelectorAll('input, textarea');
+    const [autoInput, sumInput, recordInput] = inputs;
+    if (autoInput.value || sumInput.value || recordInput.value) {
+        auto.push(autoInput.value.trim());
+        sum.push(sumInput.value.trim());
+        records.push(recordInput.value.trim());
+    }
+});
+
+
 	    
     // Проверка
     const errorMessage = document.getElementById('error-message');
