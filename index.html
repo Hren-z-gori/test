@@ -199,20 +199,20 @@
       <option value="Не обрано">Оберіть склад </option>
       </select><br><br>
 	    
-<table id="items-table" style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr>
-      <th>Техніка</th>
-      <th>Сума</th>
-      <th>Рахунок</th>
-    </tr>
-  </thead>
-  <tbody id="items-body">
-    <!-- Строки добавляются скриптом -->
-  </tbody>
-</table>
-<p><strong>Загальна сума:</strong> <span id="total-sum">0</span> грн</p>
-<datalist id="select_auto"></datalist>
+	<table id="items-table" style="width: 100%; border-collapse: collapse;">
+	  <thead>
+	    <tr>
+	      <th>Техніка</th>
+	      <th>Сума</th>
+	      <th>Рахунок</th>
+	    </tr>
+	  </thead>
+	  <tbody id="items-body">
+	    <!-- Строки добавляются скриптом -->
+	  </tbody>
+	</table>
+	<p><strong>Загальна сума:</strong> <span id="total-sum">0</span> грн</p>
+	<datalist id="select_auto"></datalist>
 
       <p>Додати ПДВ до суми (20%) <input id = "pdv" type = "checkbox"> </p>
       <p>Розрахунок готівкою <input id = "gotivka" type = "checkbox"> </p>
@@ -294,20 +294,18 @@
       };
       xhr.send(params);
     }
-
-		function showCurrentDate(){
-		var data = new Date(),
-			hour = data.getHours().toString().padStart(2, '0');
-      minutes = data.getMinutes().toString().padStart(2, '0');
-      new_value=data.toISOString().slice(0,10);
-			document.getElementById("date").value=new_value;
-      document.getElementById("time").value=hour+":"+minutes;
-			
-		}
-		showCurrentDate();
-	</script>
+function showCurrentDate(){
+	var data = new Date(),
+	hour = data.getHours().toString().padStart(2, '0');
+	minutes = data.getMinutes().toString().padStart(2, '0');
+	new_value=data.toISOString().slice(0,10);
+	document.getElementById("date").value=new_value;
+	document.getElementById("time").value=hour+":"+minutes;
+}
+showCurrentDate();
+</script>
     
-    <script type="application/javascript">
+<script type="application/javascript">
     Telegram.WebApp.ready();
 
     const initData = Telegram.WebApp.initData || '';
@@ -418,22 +416,19 @@ window.addEventListener('load', () => {
 	let previous = document.getElementById('previous').checked;
 	let photo = document.getElementById('photo').checked;
     	let comment = document.getElementById('comment').value;
+	let auto = [];
+	let sum = [];
+	let records = [];
+	document.querySelectorAll('#items-body tr').forEach(row => {
+		const inputs = row.querySelectorAll('input, textarea');
+    		const [autoInput, sumInput, recordInput] = inputs;
+    		if (autoInput.value || sumInput.value || recordInput.value) {
+        		auto.push(autoInput.value.trim());
+        		sum.push(sumInput.value.trim());
+        		records.push(recordInput.value.trim());
+    		}
+	});
 
-	    let auto = [];
-let sum = [];
-let records = [];
-document.querySelectorAll('#items-body tr').forEach(row => {
-    const inputs = row.querySelectorAll('input, textarea');
-    const [autoInput, sumInput, recordInput] = inputs;
-    if (autoInput.value || sumInput.value || recordInput.value) {
-        auto.push(autoInput.value.trim());
-        sum.push(sumInput.value.trim());
-        records.push(recordInput.value.trim());
-    }
-});
-
-
-	    
     // Проверка
     const errorMessage = document.getElementById('error-message');
     errorMessage.style.display = 'none';
