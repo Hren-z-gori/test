@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body onload="sendPostRequest()">
+
+    <div class="dialog__cover agregatLinksAddDialog" style="z-index:9020;"></div>
+    <div class='dialog__wrop agregatLinksAddDialog' style='z-index:9020;'>
+        <div id="dialog_agregatLinksAddDialog" class="dialog" style="width:530px; ">
+            <div class="dialog__caption dragable-handle">
+                Добавление привязки </div>
+            <div style="height: 220px; " id='agregatLinksAddDialog'>
+                <form id=agregatLinksAddDialogForm method="post">
+                    <div class="frm_box">
+                        <label>Объект</label>
+                        <select class="agregatLinksAddDialog-chosen-select" name="object_id">
+                            <option disabled selected>Выбор объекта</option>
+
+                        </select>
+                        <label style='margin-top: 8px;'>Прицепной агрегат</label>
+                        <select class="agregatLinksAddDialog-chosen-select" name="agregat_id">
+                            <option disabled selected>Выбор агрегата</option>
+
+                        </select>
+
+                        <label>Выбор периода</label>
+                        <input style="display: inline-block;width:49%;" name="unixtime_begin" type='datetime-local' title="Начало периода" unixtime="" class="agr_lnk_unixtime_input" />
+                        <input style="display: inline-block;width:49%;" name="unixtime_end" type='datetime-local' title="Конец периода" unixtime="0" class="agr_lnk_unixtime_input" />
+                    </div>
+                </form>
+            </div>
+            <div class="dialog__button-box">
+                <button onclick="sendData()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendPostRequest() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get("user_id");
+            const webApp = 'https://script.google.com/macros/s/AKfycbyflLpaZ0n6sNjYsNwuXeadppwn5HlkWsPhKsQ58Ia7sD3tJczhLfIaUyzfuJHIH97tFA/exec';
+            // отправляем запрос     
+            const xhr = new XMLHttpRequest();
+            const url = webApp; // URL эндпоинта, на который отправляем запрос
+            const params = `mode=transfer&user_id=${userId}`; // параметры POST-запроса в формате строки
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // если запрос успешно выполнен, обрабатываем ответ
+                    const response = JSON.parse(xhr.response);
+                    // заполняем выпадающий список значениями из полученого масива  
+
+                    const select_auto = document.getElementById('select_auto');
+                    const autos = response.autos;
+
+                    autos.forEach((auto) => {
+                        const el = document.createElement('option');
+                        el.textContent = auto;
+                        el.value = auto;
+                        select_auto.appendChild(el);
+                    });
+
+                    const select_p_v = document.getElementById('select_p_v');
+                    const ps = response.ps;
+                    ps.forEach((p) => {
+                        const el = document.createElement('option');
+                        el.textContent = p;
+                        el.value = p;
+                        select_p_v.appendChild(el);
+                    });
+
+                    const select_p_o = document.getElementById('select_p_o');
+                    ps.forEach((p) => {
+                        const el = document.createElement('option');
+                        el.textContent = p;
+                        el.value = p;
+                        select_p_o.appendChild(el);
+                    });
+
+                }
+            };
+            xhr.send(params);
+        }
+
+        function showCurrentDate() {
+            var data = new Date(),
+                hour = data.getHours().toString().padStart(2, '0');
+            minutes = data.getMinutes().toString().padStart(2, '0');
+            new_value = data.toISOString().slice(0, 10);
+            document.getElementById("date").value = new_value;
+            document.getElementById("time").value = hour + ":" + minutes;
+
+        }
+        showCurrentDate();
+    </script>
+
+    <script type="application/javascript">
+        Telegram.WebApp.ready();
+
+        const initData = Telegram.WebApp.initData || '';
+        const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+
+        Telegram.WebApp.MainButton
+            .setText('CLOSE WEBVIEW')
+            .show()
+            .onClick(function() {
+                webviewClose();
+            });
+
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+        });
+
+        function showMainButton() {
+            const mainButton = Telegram.WebApp.MainButton;
+            mainButton.show();
+        }
+
+        function webviewExpand() {
+            Telegram.WebApp.expand();
+        }
+
+        function webviewClose() {
+            Telegram.WebApp.close();
+        }
+
+        function sendData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bot = urlParams.get("bot");
+            const operation = urlParams.get("operation");
+            const numpp = urlParams.get("numpp");
+            const msg_id = urlParams.get("msg_id")
+            let object_id = document.getElementById('object_id').value;
+            let agregat_id = document.getElementById('agregat_id').value;
+            let unixtime_begin = document.getElementById('unixtime_begin').value;
+            let unixtime_end = document.getElementById('unixtime_end').value;
+            const webApp = 'https://script.google.com/macros/s/AKfycbyix-1csPYGZuHGQvwwjdil7Iriv2C2US-dxOgVu08cineUPv41b-7LCO1TE6FGFu7XWQ/exec';
+
+            const params = {
+                bot: bot,
+                operation: operation,
+                numpp: numpp,
+                comment: comment,
+                msg_id: msg_id,
+                initData: Telegram.WebApp.initDataUnsafe.user.id || ''
+            };
+
+            fetch(webApp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(params).toString()
+            })
+            webviewClose();
+        }
+    </script>
+
+</body>
+
+</html>
