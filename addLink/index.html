@@ -5,11 +5,6 @@
 </head>
 
 <body onload="sendPostRequest()">
-
-    <div class="dialog__cover agregatLinksAddDialog" style="z-index:9020;"></div>
-    <div class='dialog__wrop agregatLinksAddDialog' style='z-index:9020;'>
-        <div id="dialog_agregatLinksAddDialog" class="dialog" style="width:530px; ">
-            <div class="dialog__caption dragable-handle">
                 Додати причепне </div>
             <div style="height: 220px; " id='agregatLinksAddDialog'>
                 <form id=agregatLinksAddDialogForm method="post">
@@ -17,7 +12,7 @@
                         <label>Техніка</label>
                         <select id="objectSelect" name="object_id">
                             <option disabled selected>Вибір техніки</option>
-                        </select>
+                        </select><br>
                         <label style='margin-top: 8px;'>Агрегат</label>
                         <select id="agregatSelect" name="agregat_id">
                             <option disabled selected>Вибір агрегату</option>
