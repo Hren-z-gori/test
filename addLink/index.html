@@ -10,22 +10,20 @@
     <div class='dialog__wrop agregatLinksAddDialog' style='z-index:9020;'>
         <div id="dialog_agregatLinksAddDialog" class="dialog" style="width:530px; ">
             <div class="dialog__caption dragable-handle">
-                Добавление привязки </div>
+                Додати причепне </div>
             <div style="height: 220px; " id='agregatLinksAddDialog'>
                 <form id=agregatLinksAddDialogForm method="post">
                     <div class="frm_box">
-                        <label>Объект</label>
-                        <select class="agregatLinksAddDialog-chosen-select" name="object_id">
-                            <option disabled selected>Выбор объекта</option>
-
+                        <label>Техніка</label>
+                        <select id="objectSelect" name="object_id">
+                            <option disabled selected>Вибір техніки</option>
                         </select>
-                        <label style='margin-top: 8px;'>Прицепной агрегат</label>
-                        <select class="agregatLinksAddDialog-chosen-select" name="agregat_id">
-                            <option disabled selected>Выбор агрегата</option>
-
+                        <label style='margin-top: 8px;'>Агрегат</label>
+                        <select id="agregatSelect" name="agregat_id">
+                            <option disabled selected>Вибір агрегату</option>
                         </select>
 
-                        <label>Выбор периода</label>
+                        <label>Вибір периоду</label>
                         <input style="display: inline-block;width:49%;" name="unixtime_begin" type='datetime-local' title="Начало периода" unixtime="" class="agr_lnk_unixtime_input" />
                         <input style="display: inline-block;width:49%;" name="unixtime_end" type='datetime-local' title="Конец периода" unixtime="0" class="agr_lnk_unixtime_input" />
                     </div>
@@ -41,11 +39,11 @@
         function sendPostRequest() {
             const urlParams = new URLSearchParams(window.location.search);
             const userId = urlParams.get("user_id");
-            const webApp = 'https://script.google.com/macros/s/AKfycbyflLpaZ0n6sNjYsNwuXeadppwn5HlkWsPhKsQ58Ia7sD3tJczhLfIaUyzfuJHIH97tFA/exec';
+            const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
             // отправляем запрос     
             const xhr = new XMLHttpRequest();
             const url = webApp; // URL эндпоинта, на который отправляем запрос
-            const params = `mode=transfer&user_id=${userId}`; // параметры POST-запроса в формате строки
+            const params = `mode=addLink&user_id=${userId}`; // параметры POST-запроса в формате строки
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
@@ -54,32 +52,12 @@
                     const response = JSON.parse(xhr.response);
                     // заполняем выпадающий список значениями из полученого масива  
 
-                    const select_auto = document.getElementById('select_auto');
-                    const autos = response.autos;
-
-                    autos.forEach((auto) => {
-                        const el = document.createElement('option');
-                        el.textContent = auto;
-                        el.value = auto;
-                        select_auto.appendChild(el);
-                    });
-
-                    const select_p_v = document.getElementById('select_p_v');
-                    const ps = response.ps;
-                    ps.forEach((p) => {
-                        const el = document.createElement('option');
-                        el.textContent = p;
-                        el.value = p;
-                        select_p_v.appendChild(el);
-                    });
-
-                    const select_p_o = document.getElementById('select_p_o');
-                    ps.forEach((p) => {
-                        const el = document.createElement('option');
-                        el.textContent = p;
-                        el.value = p;
-                        select_p_o.appendChild(el);
-                    });
+                    const objects_selector = response.objects_selector;
+                    const agregat_selector = response.agregat_selector;
+                    const objectSelect = document.getElementById("objectSelect");
+                    const agregatSelect = document.getElementById("agregatSelect");
+                    objectSelect.innerHTML = objects_selector;
+                    agregatSelect.innerHTML = '<option disabled selected>Выбор агрегата</option>';
 
                 }
             };
