@@ -10,29 +10,31 @@
             const urlParams = new URLSearchParams(window.location.search);
             const userId = urlParams.get("user_id");
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
-            // отправляем запрос     
-            const xhr = new XMLHttpRequest();
-            const url = webApp; // URL эндпоинта, на который отправляем запрос
-            const params = `mode=transfer&user_id=${userId}`; // параметры POST-запроса в формате строки
-            xhr.open('GET', url, true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // если запрос успешно выполнен, обрабатываем ответ
-                    const response = JSON.parse(xhr.response);
-                    // заполняем выпадающий список значениями из полученого масива  
+            // URL эндпоинта, на который отправляем запрос
+            const url = `${webApp}?mode=transfer&user_id=${encodeURIComponent(userId)}`;
 
-                  console.log (response)
+            try {
+                // отправляем запрос 
+                const response = await fetch(url);
 
-
+                if (!response.ok) {
+                    throw new Error(`Ошибка сети: ${response.status}`);
                 }
-            };
-            xhr.send(params);
+
+                // получаем JSON
+                const data = await response.json();
+                
+                console.log("Данные получено:", data);
+                 // заполняем выпадающий список значениями из полученого масива  
+                // fillDropdown(data); 
+
+            } catch (error) {
+                console.error("Возникла ошибка:", error);
+            }
         }
     </script>
-
 </body>
-
 </html>
+
 
 
