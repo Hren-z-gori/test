@@ -5,36 +5,133 @@
 </head>
 
 <body onload="sendPostRequest()">
+                Додати причепне </div>
+            <div style="height: 220px; " id='agregatLinksAddDialog'>
+                <form id=agregatLinksAddDialogForm method="post">
+                    <div class="frm_box">
+                        <label>Техніка</label>
+                        <select id="objectSelect" name="object_id">
+                            <option disabled selected>Вибір техніки</option>
+                        </select><br>
+                        <label style='margin-top: 8px;'>Агрегат</label>
+                        <select id="agregatSelect" name="agregat_id">
+                            <option disabled selected>Вибір агрегату</option>
+                        </select><br>
+
+                        <label>Вибір периоду</label>
+                        <input style="display: inline-block;width:49%;" id="unixtime_begin" name="unixtime_begin" type='datetime-local' title="Начало периода" unixtime="" class="agr_lnk_unixtime_input" />
+                        <input style="display: inline-block;width:49%;" id="unixtime_end" name="unixtime_end" type='datetime-local' title="Конец периода" unixtime="0" class="agr_lnk_unixtime_input" />
+                    </div>
+                </form>
+            </div>
+            <div class="dialog__button-box">
+                <button onclick="sendData()">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function sendPostRequest() {
+		function sendPostRequest() {
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const userId = urlParams.get("user_id");
+
+			const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
+
+			const url = `${webApp}?mode=addLink&user_id=${encodeURIComponent(userId)}`;
+
+			fetch(url)
+				.then(response => response.json())
+				.then(response => {
+
+					const objectSelect = document.getElementById("objectSelect");
+					const agregatSelect = document.getElementById("agregatSelect");
+
+					objectSelect.innerHTML =
+						'<option disabled selected>Вибір техніки</option>' +
+						response.objects_selector;
+
+					agregatSelect.innerHTML =
+						'<option disabled selected>Вибір агрегату</option>' +
+						response.agregat_selector;
+
+				})
+				.catch(err => console.error("Ошибка загрузки списков:", err));
+		}
+
+        function showCurrentDate() {
+            var data = new Date(),
+                hour = data.getHours().toString().padStart(2, '0');
+            minutes = data.getMinutes().toString().padStart(2, '0');
+            new_value = data.toISOString().slice(0, 10);
+            document.getElementById("date").value = new_value;
+            document.getElementById("time").value = hour + ":" + minutes;
+
+        }
+        showCurrentDate();
+    </script>
+
+    <script type="application/javascript">
+        Telegram.WebApp.ready();
+
+        const initData = Telegram.WebApp.initData || '';
+        const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+
+        Telegram.WebApp.MainButton
+            .setText('CLOSE WEBVIEW')
+            .show()
+            .onClick(function() {
+                webviewClose();
+            });
+
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+        });
+
+        function showMainButton() {
+            const mainButton = Telegram.WebApp.MainButton;
+            mainButton.show();
+        }
+
+        function webviewExpand() {
+            Telegram.WebApp.expand();
+        }
+
+        function webviewClose() {
+            Telegram.WebApp.close();
+        }
+
+        function sendData() {
             const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get("user_id");
-            const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
-            // URL эндпоинта, на который отправляем запрос
-            const url = `${webApp}?mode=transfer&user_id=${encodeURIComponent(userId)}`;
+            const bot = urlParams.get("bot");
+            const operation = urlParams.get("operation");
+            const numpp = urlParams.get("numpp");
+            const msg_id = urlParams.get("msg_id")
+            let object_id = document.getElementById('objectSelect').value;
+            let agregat_id = document.getElementById('agregatSelect').value;
+            let unixtime_begin = document.getElementById('unixtime_begin').value;
+            let unixtime_end = document.getElementById('unixtime_end').value;
+            const webApp = 'https://script.google.com/macros/s/AKfycbyix-1csPYGZuHGQvwwjdil7Iriv2C2US-dxOgVu08cineUPv41b-7LCO1TE6FGFu7XWQ/exec';
 
-            try {
-                // отправляем запрос 
-                const response = await fetch(url);
+            const params = {
+                bot: bot,
+                operation: operation,
+                numpp: numpp,
+                msg_id: msg_id,
+                initData: Telegram.WebApp.initDataUnsafe.user.id || ''
+            };
 
-                if (!response.ok) {
-                    throw new Error(`Ошибка сети: ${response.status}`);
-                }
-
-                // получаем JSON
-                const data = await response.json();
-                
-                console.log("Данные получено:", data);
-                 // заполняем выпадающий список значениями из полученого масива  
-                // fillDropdown(data); 
-
-            } catch (error) {
-                console.error("Возникла ошибка:", error);
-            }
+            fetch(webApp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(params).toString()
+            })
+            webviewClose();
         }
     </script>
+
 </body>
+
 </html>
-
-
-
