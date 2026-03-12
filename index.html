@@ -21,7 +21,7 @@ function sendPostRequest() {
 
             const objectSelect = document.getElementById("objectSelect");
             const agregatSelect = document.getElementById("agregatSelect");
-
+ console.log (response)
             objectSelect.innerHTML =
                 '<option disabled selected>Вибір техніки</option>' +
                 response.objects_selector;
@@ -34,12 +34,13 @@ function sendPostRequest() {
         .catch(err => console.error("Ошибка загрузки списков:", err));
 }
 
-                          console.log (response)
+                         
     </script>
 
 </body>
 
 </html>
+
 
 
 
