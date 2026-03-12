@@ -13,7 +13,7 @@
             // отправляем запрос     
             const xhr = new XMLHttpRequest();
             const url = webApp; // URL эндпоинта, на который отправляем запрос
-            const params = `mode=addLink&user_id=${userId}`; // параметры POST-запроса в формате строки
+            const params = `mode=transfer&user_id=${userId}`; // параметры POST-запроса в формате строки
             xhr.open('GET', url, true);
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.onreadystatechange = function() {
@@ -34,4 +34,5 @@
 </body>
 
 </html>
+
 
