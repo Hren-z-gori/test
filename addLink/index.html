@@ -221,6 +221,23 @@
 
     <script>
         function sendPostRequest() {
+			/ проверка кеша
+			const cacheTime = localStorage.getItem("selectors_time");
+
+			if (cacheTime && Date.now() - cacheTime < 3600000) { // 1 час
+
+    			document.getElementById("select_auto").innerHTML =
+       			localStorage.getItem("objects_selector");
+
+    			document.getElementById("select_agregat").innerHTML =
+        		localStorage.getItem("agregat_selector");
+
+    			document.getElementById("loader").style.display = "none";
+    			document.getElementById("content").style.display = "block";
+
+    			return;
+			}
+			
             const urlParams = new URLSearchParams(window.location.search);
             const userId = urlParams.get("user_id");
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
@@ -234,8 +251,11 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     // если запрос успешно выполнен, обрабатываем ответ
                     const response = JSON.parse(xhr.response);
-                    // заполняем выпадающий список значениями из полученого масива  
-                    console.log (response)
+					// кешируем список
+					localStorage.setItem("objects_selector", response.objects_selector);
+					localStorage.setItem("agregat_selector", response.agregat_selector);
+					localStorage.setItem("selectors_time", Date.now());
+                    // заполняем выпадающий список значениями из полученого масива 
                     const objects_selector = response.objects_selector;
                     const agregat_selector = response.agregat_selector;
 
