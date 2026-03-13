@@ -202,7 +202,7 @@
                             <option disabled selected>Вибір агрегату</option>
                         </select><br>
 
-                        <input type="text" id="input_auto" list="select_auto" placeholder = "Для техніки">
+                        <input type="text" id="input_auto" list="select_auto" placeholder = "Для техніки" onchange="checkValue(this)>
                         <datalist id = "select_auto">
                         </datalist><br><br>
                         <label>Вибір периоду</label>
@@ -261,6 +261,25 @@
 
         }
         showCurrentDate();
+
+
+		function checkValue(input) {
+  const options = document.getElementById('select_auto').options;
+  let valFound = false;
+  
+  for (let i = 0; i < options.length; i++) {
+    if (input.value === options[i].value) {
+      valFound = true;
+      break;
+    }
+  }
+
+  if (!valFound) {
+    alert("Будь ласка, оберіть значення зі списку!");
+    input.value = ""; // Очищуємо поле, якщо значення не з переліку
+  }
+}
+
     </script>
 
     <script type="application/javascript">
