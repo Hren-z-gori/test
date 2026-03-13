@@ -196,16 +196,15 @@
 
                         <input type="text" id="input_auto" list="select_auto" placeholder = Вибір техніки" onchange="checkValue(this, 'select_auto')"><br>
                         <datalist id = "select_auto">
-                        </datalist><br><br>
+                        </datalist><br>
 
 						<input type="text" id="input_agregat" list="select_agregat" placeholder = Вибір агрегату" onchange="checkValue(this, 'select_agregat')"><br>
                         <datalist id = "select_agregat">
-                        </datalist><br><br>
+                        </datalist><br>
 						
                         <label>Вибір периоду</label>
                         <input id = "date" type = "date" value = "">
                         <input id = "time" type = "time"> <br><br>
-                        <input style="display: inline-block;width:49%;" name="unixtime_begin" type='datetime-local' title="Начало периода" unixtime="" class="agr_lnk_unixtime_input" />
                     </div>
                 </form>
             </div>
@@ -234,14 +233,11 @@
                     console.log (response)
                     const objects_selector = response.objects_selector;
                     const agregat_selector = response.agregat_selector;
-					
-					const testSelect = document.getElementById("select_auto");
-                 	testSelect.innerHTML  = agregat_selector
+
                   	const objectSelect = document.getElementById("select_auto");
                   	objectSelect.innerHTML  = objects_selector;
 				  	const agregatSelect = document.getElementById("select_agregat");
                   	agregatSelect.innerHTML  = agregat_selector;
-
                 }
             };
             xhr.send(params);
@@ -252,8 +248,8 @@
                 hour = data.getHours().toString().padStart(2, '0');
             minutes = data.getMinutes().toString().padStart(2, '0');
             new_value = data.toISOString().slice(0, 10);
-            //document.getElementById("date").value = new_value;
-            //document.getElementById("time").value = hour + ":" + minutes;
+            document.getElementById("date").value = new_value;
+            document.getElementById("time").value = hour + ":" + minutes;
 
         }
         showCurrentDate();
