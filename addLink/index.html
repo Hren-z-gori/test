@@ -331,15 +331,14 @@
     			Telegram.WebApp.showAlert("Оберіть агрегат");
     			return;
 			}
-			
+			document.querySelector("button").disabled = true;
 			const datetime = new Date(date + "T" + time);
 			const unixtime = Math.floor(datetime.getTime() / 1000);
 			
             const params = {
 				unixtime: unixtime,
                 object_id: object_id,
-                agregat_id: agregat_id,
-                initData: Telegram.WebApp.initDataUnsafe.user.id || ''
+                agregat_id: agregat_id
             };
 			
             fetch(webApp, {
