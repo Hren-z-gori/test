@@ -21,14 +21,14 @@
                     // если запрос успешно выполнен, обрабатываем ответ
                     const response = JSON.parse(xhr.response);
                     // заполняем выпадающий список значениями из полученого масива  
-        
+        console.log (response)
                     const objects_selector = response.objects_selector;
                     const agregat_selector = response.agregat_selector;
                     const objectSelect = document.getElementById("objectSelect");
                     const agregatSelect = document.getElementById("agregatSelect");
-                    objectSelect.innerHTML = objects_selector;
-                    agregatSelect.innerHTML = '<option disabled selected>Выбор агрегата</option>';
-console.log (response)
+                    //objectSelect.innerHTML = objects_selector;
+                    //agregatSelect.innerHTML = '<option disabled selected>Выбор агрегата</option>';
+
                 }
             };
             xhr.send(params);
@@ -40,6 +40,7 @@ console.log (response)
 </body>
 
 </html>
+
 
 
 
