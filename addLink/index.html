@@ -221,7 +221,7 @@
 
     <script>
         function sendPostRequest() {
-			/ проверка кеша
+			// проверка кеша
 			const cacheTime = localStorage.getItem("selectors_time");
 
 			if (cacheTime && Date.now() - cacheTime < 3600000) { // 1 час
