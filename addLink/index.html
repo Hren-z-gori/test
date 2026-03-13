@@ -306,23 +306,19 @@
         }
 
         function sendData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const bot = urlParams.get("bot");
-            const operation = urlParams.get("operation");
-            const numpp = urlParams.get("numpp");
-            const msg_id = urlParams.get("msg_id")
-            let object_id = document.getElementById('object_id').value;
-            let agregat_id = document.getElementById('agregat_id').value;
-            let unixtime_begin = document.getElementById('unixtime_begin').value;
-            let unixtime_end = document.getElementById('unixtime_end').value;
-            const webApp = 'https://script.google.com/macros/s/AKfycbyix-1csPYGZuHGQvwwjdil7Iriv2C2US-dxOgVu08cineUPv41b-7LCO1TE6FGFu7XWQ/exec';
+			let date = document.getElementById('date').value;
+    		let time = document.getElementById('time').value;
+            //const urlParams = new URLSearchParams(window.location.search);
+            //const bot = urlParams.get("bot");
+            let object_id = document.getElementById('input_auto').value;
+            let agregat_id = document.getElementById('input_agregat').value;
+            const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
 
             const params = {
-                bot: bot,
-                operation: operation,
-                numpp: numpp,
-                comment: comment,
-                msg_id: msg_id,
+				date: date,
+				time: time,
+                object_id: object_id,
+                agregat_id: agregat_id,
                 initData: Telegram.WebApp.initDataUnsafe.user.id || ''
             };
 
