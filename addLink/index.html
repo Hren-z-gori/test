@@ -278,7 +278,7 @@
     		}
 
  		   if (!valFound && input.value !== "") {
-  		      alert("Оберіть значення зі списку!");
+  		      Telegram.WebApp.showAlert("Оберіть значення зі списку!");
   		      input.value = ""; // Очищуємо поле
   		  }
 		}
@@ -328,7 +328,7 @@
 			}
 
 			if (!agregat_id) {
-    			alert("Оберіть агрегат");
+    			Telegram.WebApp.showAlert("Оберіть агрегат");
     			return;
 			}
 			document.querySelector("button").disabled = true
