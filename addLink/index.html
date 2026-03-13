@@ -326,7 +326,6 @@
     			Telegram.WebApp.showAlert("Оберіть техніку");
     			return;
 			}
-
 			if (!agregat_id) {
     			Telegram.WebApp.showAlert("Оберіть агрегат");
     			return;
@@ -334,20 +333,13 @@
 			document.querySelector("button").disabled = true;
 			const datetime = new Date(date + "T" + time);
 			const unixtime = Math.floor(datetime.getTime() / 1000);
-			
+
             const params = {
 				unixtime: unixtime,
                 object_id: object_id,
                 agregat_id: agregat_id
             };
-			
-            fetch(webApp, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(params).toString()
-            })
+			Telegram.WebApp.sendData(params)
             webviewClose();
         }
     </script>
