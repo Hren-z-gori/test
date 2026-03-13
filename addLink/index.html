@@ -331,7 +331,7 @@
     			Telegram.WebApp.showAlert("Оберіть агрегат");
     			return;
 			}
-			document.querySelector("button").disabled = true
+			
 			const datetime = new Date(date + "T" + time);
 			const unixtime = Math.floor(datetime.getTime() / 1000);
 			
