@@ -188,26 +188,31 @@
 </head>
 
 <body onload="sendPostRequest()">
-                Додати причепне </div>
+	<div id="loader" style="padding:20px;text-align:center;">
+		⏳ Завантаження данних...
+	</div>
+	<div id="content" style="display:none;">
+              <h1  Додати причепне </h1>
   
             <div style="height: 220px; " id='agregatLinksAddDialog'>
                 <form id=agregatLinksAddDialogForm method="post">
                     <div class="frm_box">
 
-                        <input type="text" id="input_auto" list="select_auto" placeholder = Вибір техніки" onchange="checkValue(this, 'select_auto')"><br>
+                        <input type="text" id="input_auto" list="select_auto" placeholder = "Вибір техніки" onchange="checkValue(this, 'select_auto')"><br>
                         <datalist id = "select_auto">
                         </datalist><br>
 
-						<input type="text" id="input_agregat" list="select_agregat" placeholder = Вибір агрегату" onchange="checkValue(this, 'select_agregat')"><br>
+						<input type="text" id="input_agregat" list="select_agregat" placeholder = "Вибір агрегату" onchange="checkValue(this, 'select_agregat')"><br>
                         <datalist id = "select_agregat">
                         </datalist><br>
 						
-                        <label>Вибір периоду</label>
-                        <input id = "date" type = "date" value = "">
+                        <label>Вибір периоду</label><br>
+                        <input id = "date" type = "date" value = "" readonly>
                         <input id = "time" type = "time"> <br>
                     </div>
                 </form>
             </div>
+		</div>
             <div class="dialog__button-box">
                 <button onclick="sendData()">OK</button>
             </div>
@@ -233,6 +238,10 @@
                     console.log (response)
                     const objects_selector = response.objects_selector;
                     const agregat_selector = response.agregat_selector;
+
+					// скрываем loader
+       		 		document.getElementById("loader").style.display = "none";
+        			document.getElementById("content").style.display = "block";
 
                   	const objectSelect = document.getElementById("select_auto");
                   	objectSelect.innerHTML  = objects_selector;
@@ -313,15 +322,26 @@
             let object_id = document.getElementById('input_auto').value;
             let agregat_id = document.getElementById('input_agregat').value;
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
+			if (!object_id) {
+    			Telegram.WebApp.showAlert("Оберіть техніку");
+    			return;
+			}
 
+			if (!agregat_id) {
+    			alert("Оберіть агрегат");
+    			return;
+			}
+			document.querySelector("button").disabled = true
+			const datetime = new Date(date + "T" + time);
+			const unixtime = Math.floor(datetime.getTime() / 1000);
+			
             const params = {
-				date: date,
-				time: time,
+				unixtime: unixtime,
                 object_id: object_id,
                 agregat_id: agregat_id,
                 initData: Telegram.WebApp.initDataUnsafe.user.id || ''
             };
-
+			
             fetch(webApp, {
                 method: 'POST',
                 headers: {
