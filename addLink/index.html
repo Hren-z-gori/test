@@ -339,7 +339,7 @@
                 object_id: object_id,
                 agregat_id: agregat_id
             };
-			Telegram.WebApp.sendData(params)
+			Telegram.WebApp.sendData(JSON.stringify(params));
             webviewClose();
         }
     </script>
