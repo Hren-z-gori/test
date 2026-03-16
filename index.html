@@ -237,24 +237,7 @@
 
 						document.getElementById("loader").style.display = "none";
 						document.getElementById("content").style.display = "block";
-const choices = new Choices('#select_auto', {
-    searchEnabled: true,
-    shouldSort: false,
-    searchChoices: true,
-    searchResultLimit: 50,
-    callbackOnSearch: function(value) {
-
-        const choices = this._store.choices;
-
-        const filtered = choices.filter(c =>
-            c.label.toLowerCase().includes(value.toLowerCase())
-        );
-
-        this.clearChoices();
-        this.setChoices(filtered, 'value', 'label', true);
-
-    }
-});					                      
+				                      
 						return;
 					}
 
@@ -295,6 +278,30 @@ const choices = new Choices('#select_auto', {
 					document.getElementById("select_auto").innerHTML = response.objects_selector;
 					document.getElementById("select_agregat").innerHTML = response.agregat_selector;
 
+const choices = new Choices('#select_auto', {
+    searchEnabled: true,
+    shouldSort: false,
+    searchChoices: true,
+    searchResultLimit: 50,
+    callbackOnSearch: function(value) {
+
+        const choices = this._store.choices;
+
+        const filtered = choices.filter(c =>
+            c.label.toLowerCase().includes(value.toLowerCase())
+        );
+
+        this.clearChoices();
+        this.setChoices(filtered, 'value', 'label', true);
+
+    }
+});	
+
+new Choices('#select_agregat', {
+    searchEnabled: true,
+    searchChoices: true,
+    shouldSort: false
+});						
 					// скрываем loader
 					document.getElementById("loader").style.display = "none";
 					document.getElementById("content").style.display = "block";
