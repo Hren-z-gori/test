@@ -2,52 +2,397 @@
 <html>
 
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+		  <meta charset="utf-8">
+              <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="MobileOptimized" content="176" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="robots" content="noindex,nofollow" />
+      <script src="https://telegram.org/js/telegram-web-app.js"></script>
+     <script>
+        function setThemeClass() {
+            document.documentElement.className = Telegram.WebApp.colorScheme;
+        }
+        Telegram.WebApp.onEvent('themeChanged', setThemeClass);
+        setThemeClass();
+        Telegram.WebApp.expand();
+
+    </script>     
+      <style>
+
+        body {
+            font-family: sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #222222);
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            color-scheme: var(--tg-color-scheme);
+        }
+        input {
+            font-size: 16px;
+        }
+        select {
+            font-size: 16px;
+        }
+
+        a {
+            color: var(--tg-theme-link-color, #2678b6);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            font-size: 14px;
+            margin: 15px 0;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--tg-theme-button-color, #50a8eb);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            opacity: 0.6;
+            cursor: auto;
+            pointer-events: none;
+        }
+
+        button.close_btn {
+            /*position: fixed;*/
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            margin: 0;
+            padding: 16px 20px;
+            text-transform: uppercase;
+        }
+
+        section {
+            padding: 15px 15px 65px;
+            text-align: center;
+        }
+
+        p {
+            margin: 7px 0 7px;
+        }
+
+        ul {
+            text-align: left;
+        }
+
+        li {
+            color: var(--tg-theme-hint-color, #a8a8a8);
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 7px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, .07);
+            border-radius: 4px;
+            padding: 4px;
+            margin: 7px 0;
+            word-break: break-all;
+            word-break: break-word;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        .dark pre {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        .hint {
+            font-size: .8em;
+            color: var(--tg-theme-hint-color, #a8a8a8);
+        }
+
+        .ok {
+            color: green;
+        }
+
+        .err {
+            color: red;
+        }
+
+        #fixed_wrap {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            transform: translateY(100vh);
+        }
+
+        .viewport_border,
+        .viewport_stable_border {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: var(--tg-viewport-height, 100vh);
+            pointer-events: none;
+        }
+
+        .viewport_stable_border {
+            height: var(--tg-viewport-stable-height, 100vh);
+        }
+
+        .viewport_border:before,
+        .viewport_stable_border:before {
+            content: attr(text);
+            display: inline-block;
+            position: absolute;
+            background: gray;
+            right: 0;
+            top: 0;
+            font-size: 7px;
+            padding: 2px 4px;
+            vertical-align: top;
+        }
+
+        .viewport_stable_border:before {
+            background: green;
+            left: 0;
+            right: auto;
+        }
+
+        .viewport_border:after,
+        .viewport_stable_border:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 2px dashed gray;
+        }
+
+        .viewport_stable_border:after {
+            border-color: green;
+        }
+
+        small {
+            font-size: 12px;
+        }
+
+      </style>
 </head>
 
 <body onload="sendPostRequest()">
+	<div id="loader" style="padding:20px;text-align:center;">
+		⏳ Завантаження данних...
+	</div>
+	<div id="content" style="display:none;">
+              <h1>  Додати причепне </h1>
+  
+            <div style="height: 220px; " id='agregatLinksAddDialog'>
+                <form id=agregatLinksAddDialogForm method="post">
+                    <div class="frm_box">
+
+                        <select id="select_auto" placeholder="Вибір техніки">
+</select><br>
+
+						<select id="select_agregat" placeholder="Вибір агрегату">
+</select><br>
+						
+                        <p>Вибір периоду</p><br>
+                        <input id = "date" type = "date" value = "" readonly>
+                        <input id = "time" type = "time"> <br>
+                    </div>
+                </form>
+            </div>
+		</div>
+            <div class="dialog__button-box">
+                <button onclick="sendData()">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function sendPostRequest() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get("user_id");
-            const webApp = 'https://script.google.com/macros/s/AKfycbyflLpaZ0n6sNjYsNwuXeadppwn5HlkWsPhKsQ58Ia7sD3tJczhLfIaUyzfuJHIH97tFA/exec';
-            // отправляем запрос     
-            const xhr = new XMLHttpRequest();
-            const url = webApp; // URL эндпоинта, на который отправляем запрос
-            const params = `mode=addLink&user_id=${userId}`; // параметры POST-запроса в формате строки
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // если запрос успешно выполнен, обрабатываем ответ
-                    const response = JSON.parse(xhr.response);
-                    // заполняем выпадающий список значениями из полученого масива  
-        console.log (response)
-                    const objects_selector = response.objects_selector;
-                    const agregat_selector = response.agregat_selector;
-                    const objectSelect = document.getElementById("objectSelect");
-                    const agregatSelect = document.getElementById("agregatSelect");
-                    //objectSelect.innerHTML = objects_selector;
-                    //agregatSelect.innerHTML = '<option disabled selected>Выбор агрегата</option>';
 
-                }
-            };
-            xhr.send(params);
+	const storage = Telegram.WebApp.DeviceStorage;
+
+	// проверка кеша
+	storage.getItem("selectors_time", function(err, cacheTime) {
+
+		if (!err && cacheTime && Date.now() - Number(cacheTime) < 3600000) { // 1 час
+
+			storage.getItem("objects_selector", function(err1, objects) {
+				storage.getItem("agregat_selector", function(err2, agregat) {
+
+					if (!err1 && !err2 && objects && agregat) {
+
+						document.getElementById("select_auto").innerHTML = objects;
+						document.getElementById("select_agregat").innerHTML = agregat;
+
+						document.getElementById("loader").style.display = "none";
+						document.getElementById("content").style.display = "block";
+                        new TomSelect("#select_auto",{
+    create:false,
+    sortField:{
+        field:"text",
+        direction:"asc"
+    }
+});
+
+new TomSelect("#select_agregat",{
+    create:false
+});
+
+                        
+						return;
+					}
+
+					makeRequest(); // если кеш повреждён
+
+				});
+			});
+
+		} else {
+			makeRequest(); // кеша нет или устарел
+		}
+
+		function makeRequest() {
+
+			const urlParams = new URLSearchParams(window.location.search);
+			const userId = urlParams.get("user_id");
+
+			const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
+
+			const xhr = new XMLHttpRequest();
+			const params = `mode=addLink&user_id=${userId}`;
+
+			xhr.open('POST', webApp, true);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+			xhr.onreadystatechange = function() {
+
+				if (xhr.readyState === 4 && xhr.status === 200) {
+
+					const response = JSON.parse(xhr.response);
+
+					// кешируем список
+					storage.setItem("objects_selector", response.objects_selector);
+					storage.setItem("agregat_selector", response.agregat_selector);
+					storage.setItem("selectors_time", Date.now());
+
+					// заполняем списки
+					document.getElementById("select_auto").innerHTML = response.objects_selector;
+					document.getElementById("select_agregat").innerHTML = response.agregat_selector;
+
+					// скрываем loader
+					document.getElementById("loader").style.display = "none";
+					document.getElementById("content").style.display = "block";
+				}
+			};
+
+			xhr.send(params);
+		}
+
+	});
+}
+        function showCurrentDate() {
+            var data = new Date(),
+                hour = data.getHours().toString().padStart(2, '0');
+            minutes = data.getMinutes().toString().padStart(2, '0');
+            new_value = data.toISOString().slice(0, 10);
+            document.getElementById("date").value = new_value;
+            document.getElementById("time").value = hour + ":" + minutes;
+
         }
+        showCurrentDate();
 
-                         
+
+		function checkValue(input, listId) {
+    		const datalist = document.getElementById(listId);
+    		const options = datalist.options;
+    		let valFound = false;
+
+    		// Перевіряємо, чи є введене значення серед опцій конкретного списку
+    		for (let i = 0; i < options.length; i++) {
+    		    if (input.value === options[i].value) {
+            		valFound = true;
+           		 break;
+        		}
+    		}
+
+ 		   if (!valFound && input.value !== "") {
+  		      Telegram.WebApp.showAlert("Оберіть значення зі списку!");
+  		      input.value = ""; // Очищуємо поле
+  		  }
+		}
     </script>
 
+    <script type="application/javascript">
+        Telegram.WebApp.ready();
+
+        const initData = Telegram.WebApp.initData || '';
+        const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+
+        Telegram.WebApp.MainButton
+            .setText('CLOSE WEBVIEW')
+            .show()
+            .onClick(function() {
+                webviewClose();
+            });
+
+        Telegram.WebApp.onEvent('themeChanged', function() {
+            document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+        });
+
+        function showMainButton() {
+            const mainButton = Telegram.WebApp.MainButton;
+            mainButton.show();
+        }
+
+        function webviewExpand() {
+            Telegram.WebApp.expand();
+        }
+
+        function webviewClose() {
+            Telegram.WebApp.close();
+        }
+
+        function sendData() {
+			let date = document.getElementById('date').value;
+    		let time = document.getElementById('time').value;
+            //const urlParams = new URLSearchParams(window.location.search);
+            //const bot = urlParams.get("bot");
+            let object_id = document.getElementById('input_auto').value;
+            let agregat_id = document.getElementById('input_agregat').value;
+            const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
+			if (!object_id) {
+    			Telegram.WebApp.showAlert("Оберіть техніку");
+    			return;
+			}
+			if (!agregat_id) {
+    			Telegram.WebApp.showAlert("Оберіть агрегат");
+    			return;
+			}
+			//document.querySelector("button").disabled = true;
+			const datetime = new Date(date + "T" + time);
+			const unixtime = Math.floor(datetime.getTime() / 1000);
+
+            const params = {
+				unixtime: unixtime,
+                object_id: object_id,
+                agregat_id: agregat_id
+            };
+			Telegram.WebApp.sendData(JSON.stringify(params));
+            webviewClose();
+        }
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
