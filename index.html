@@ -241,19 +241,15 @@ new TomSelect("#select_auto",{
     create:false,
     searchField:["text"],
     maxOptions:50,
-    score: function(search){
-
-        search = search.toLowerCase();
-
-        return function(item){
-            return item.text.toLowerCase().includes(search) ? 1 : 0;
-        }
-    }
+    sortField:[],
 });
-
 new TomSelect("#select_agregat",{
-    create:false
+    create:false,
+    searchField:["text"],
+    maxOptions:50,
+    sortField:[],
 });
+
 
                         
 						return;
