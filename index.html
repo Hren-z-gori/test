@@ -237,11 +237,17 @@
 
 						document.getElementById("loader").style.display = "none";
 						document.getElementById("content").style.display = "block";
-                        new TomSelect("#select_auto",{
+new TomSelect("#select_auto",{
     create:false,
-    sortField:{
-        field:"text",
-        direction:"asc"
+    searchField:["text"],
+    maxOptions:50,
+    score: function(search){
+
+        search = search.toLowerCase();
+
+        return function(item){
+            return item.text.toLowerCase().includes(search) ? 1 : 0;
+        }
     }
 });
 
