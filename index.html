@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 		  <meta charset="utf-8">
               <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -237,21 +237,16 @@
 
 						document.getElementById("loader").style.display = "none";
 						document.getElementById("content").style.display = "block";
-new TomSelect("#select_auto",{
-    create:false,
-    searchField:["text"],
-    maxOptions:50,
-    sortField:[],
+new Choices('#select_auto', {
+    searchEnabled: true,
+    searchChoices: true,
+    shouldSort: false
 });
-new TomSelect("#select_agregat",{
-    create:false,
-    searchField:["text"],
-    maxOptions:50,
-    sortField:[],
-});
-
-
-                        
+new Choices('#select_agregat', {
+    searchEnabled: true,
+    searchChoices: true,
+    shouldSort: false
+});						                      
 						return;
 					}
 
@@ -394,7 +389,7 @@ new TomSelect("#select_agregat",{
             webviewClose();
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </body>
 
 </html>
