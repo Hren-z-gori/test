@@ -237,10 +237,23 @@
 
 						document.getElementById("loader").style.display = "none";
 						document.getElementById("content").style.display = "block";
-new Choices('#select_auto', {
+const choices = new Choices('#select_auto', {
     searchEnabled: true,
+    shouldSort: false,
     searchChoices: true,
-    shouldSort: false
+    searchResultLimit: 50,
+    callbackOnSearch: function(value) {
+
+        const choices = this._store.choices;
+
+        const filtered = choices.filter(c =>
+            c.label.toLowerCase().includes(value.toLowerCase())
+        );
+
+        this.clearChoices();
+        this.setChoices(filtered, 'value', 'label', true);
+
+    }
 });
 new Choices('#select_agregat', {
     searchEnabled: true,
