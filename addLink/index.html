@@ -2,8 +2,8 @@
 <html>
 
 <head>
-  
-		  <meta charset="utf-8">
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+	<meta charset="utf-8">
               <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="MobileOptimized" content="176" />
@@ -198,13 +198,11 @@
                 <form id=agregatLinksAddDialogForm method="post">
                     <div class="frm_box">
 
-                        <input type="text" id="input_auto" list="select_auto" placeholder = "Вибір техніки" onchange="checkValue(this, 'select_auto')"><br>
-                        <datalist id = "select_auto">
-                        </datalist><br>
+                        <select id="select_auto" placeholder="Вибір техніки">
+</select><br>
 
-						<input type="text" id="input_agregat" list="select_agregat" placeholder = "Вибір агрегату" onchange="checkValue(this, 'select_agregat')"><br>
-                        <datalist id = "select_agregat">
-                        </datalist><br>
+						<select id="select_agregat" placeholder="Вибір агрегату">
+</select><br>
 						
                         <p>Вибір периоду</p><br>
                         <input id = "date" type = "date" value = "" readonly>
@@ -236,10 +234,10 @@
 
 						document.getElementById("select_auto").innerHTML = objects;
 						document.getElementById("select_agregat").innerHTML = agregat;
-
+						initSelectors();
 						document.getElementById("loader").style.display = "none";
 						document.getElementById("content").style.display = "block";
-
+				                      
 						return;
 					}
 
@@ -279,7 +277,7 @@
 					// заполняем списки
 					document.getElementById("select_auto").innerHTML = response.objects_selector;
 					document.getElementById("select_agregat").innerHTML = response.agregat_selector;
-
+					initSelectors();
 					// скрываем loader
 					document.getElementById("loader").style.display = "none";
 					document.getElementById("content").style.display = "block";
@@ -291,6 +289,26 @@
 
 	});
 }
+
+		function initSelectors(){
+
+    		if(!document.getElementById("select_auto").tomselect){
+        		new TomSelect("#select_auto",{
+            		create:false,
+            		sortField:{
+                		field:"text",
+                		direction:"asc"
+            		}
+        		});
+    		}
+
+    		if(!document.getElementById("select_agregat").tomselect){
+        		new TomSelect("#select_agregat",{
+            		create:false
+        		});
+    		}
+
+		}
         function showCurrentDate() {
             var data = new Date(),
                 hour = data.getHours().toString().padStart(2, '0');
@@ -358,8 +376,12 @@
     		let time = document.getElementById('time').value;
             //const urlParams = new URLSearchParams(window.location.search);
             //const bot = urlParams.get("bot");
-            let object_id = document.getElementById('input_auto').value;
-            let agregat_id = document.getElementById('input_agregat').value;
+            let object_id = document.getElementById('select_auto').value;
+            let agregat_id = document.getElementById('select_agregat').value;
+			let select = document.getElementById('select_auto');
+			let object_name = select.options[select.selectedIndex].text;
+			select = document.getElementById('select_agregat');
+			let agregat_name = select.options[select.selectedIndex].text;
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
 			if (!object_id) {
     			Telegram.WebApp.showAlert("Оберіть техніку");
@@ -376,13 +398,15 @@
             const params = {
 				unixtime: unixtime,
                 object_id: object_id,
-                agregat_id: agregat_id
+                agregat_id: agregat_id,
+				object_name: object_name,
+				agregat_name: agregat_name
             };
 			Telegram.WebApp.sendData(JSON.stringify(params));
             webviewClose();
         }
     </script>
-
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>
