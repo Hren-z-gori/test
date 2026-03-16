@@ -285,16 +285,9 @@ new TomSelect("#select_auto",{
         direction:"asc"
     }
 });
-					
+
 new TomSelect("#select_agregat",{
-    create:false,
-    searchField:["text"],
-    score: function(search) {
-        var score = this.getScoreFunction(search);
-        return function(item) {
-            return score(item);
-        };
-    }
+    create:false
 });
 					
 					// скрываем loader
