@@ -378,8 +378,10 @@
             //const bot = urlParams.get("bot");
             let object_id = document.getElementById('select_auto').value;
             let agregat_id = document.getElementById('select_agregat').value;
-			let object_name = document.getElementById('select_auto').text;
-            let agregat_name = document.getElementById('select_agregat').text;
+			let select_o = document.getElementById('select_auto');
+			let object_name = select.options[select_o.selectedIndex].text;
+			let select_a = document.getElementById('select_agregat');
+			let agregat_name = select.options[select_a.selectedIndex].text;
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
 			if (!object_id) {
     			Telegram.WebApp.showAlert("Оберіть техніку");
