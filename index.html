@@ -2,8 +2,8 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-		  <meta charset="utf-8">
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+	<meta charset="utf-8">
               <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="MobileOptimized" content="176" />
@@ -278,30 +278,25 @@
 					document.getElementById("select_auto").innerHTML = response.objects_selector;
 					document.getElementById("select_agregat").innerHTML = response.agregat_selector;
 
-const choices = new Choices('#select_auto', {
-    searchEnabled: true,
-    shouldSort: false,
-    searchChoices: true,
-    searchResultLimit: 50,
-    callbackOnSearch: function(value) {
-
-        const choices = this._store.choices;
-
-        const filtered = choices.filter(c =>
-            c.label.toLowerCase().includes(value.toLowerCase())
-        );
-
-        this.clearChoices();
-        this.setChoices(filtered, 'value', 'label', true);
-
+new TomSelect("#select_auto",{
+    create:false,
+    sortField:{
+        field:"text",
+        direction:"asc"
     }
-});	
-
-new Choices('#select_agregat', {
-    searchEnabled: true,
-    searchChoices: true,
-    shouldSort: false
-});						
+});
+					
+new TomSelect("#select_agregat",{
+    create:false,
+    searchField:["text"],
+    score: function(search) {
+        var score = this.getScoreFunction(search);
+        return function(item) {
+            return score(item);
+        };
+    }
+});
+					
 					// скрываем loader
 					document.getElementById("loader").style.display = "none";
 					document.getElementById("content").style.display = "block";
@@ -404,7 +399,7 @@ new Choices('#select_agregat', {
             webviewClose();
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>
