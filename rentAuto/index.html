@@ -188,10 +188,7 @@
     </head>
 
     <body onload="sendPostRequest()">
-	<div id="loader" style="padding:20px;text-align:center;">
-		⏳ Завантаження данних...
-	</div>
-	<div id="content" style="display:none;">
+
       <h1> Заявка на оренду</h1> 
       <input type="text" id="input_auto" list="select_auto" placeholder = "Автомобіль">
       <datalist id = "select_auto">
@@ -249,8 +246,8 @@
         		select_p_v.appendChild(el);
       		});
 					// скрываем loader
-					document.getElementById("loader").style.display = "none";
-					document.getElementById("content").style.display = "block";         
+					/document.getElementById("loader").style.display = "none";
+					/document.getElementById("content").style.display = "block";         
         }
       };
       xhr.send(params);
