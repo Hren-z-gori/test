@@ -188,7 +188,10 @@
     </head>
 
     <body onload="sendPostRequest()">
-
+	<div id="loader" style="padding:20px;text-align:center;">
+		⏳ Завантаження данних...
+	</div>
+	<div id="content" style="display:none;">
       <h1> Заявка на оренду</h1> 
       <input type="text" id="input_auto" list="select_auto" placeholder = "Автомобіль">
       <datalist id = "select_auto">
@@ -218,7 +221,7 @@
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = `mode=order&user_id=${userId}`; // параметры POST-запроса в формате строки
+      const params = `mode=rentAuto&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
@@ -245,7 +248,8 @@
         		el.value = p;
         		select_p_v.appendChild(el);
       		});
-          
+			document.getElementById("loader").style.display = "none";
+			document.getElementById("content").style.display = "block";          
         }
       };
       xhr.send(params);
@@ -308,7 +312,7 @@
     
     // Проверка авто
     if (!auto) {
-        errorMessage.textContent = "Будь ласка, оберіть спосіб компенсації.";
+        errorMessage.textContent = "Будь ласка, вкажіть авто.";
         document.getElementById('input_auto').style.border = '2px solid red';
         hasError = true;
     } else {
@@ -316,7 +320,7 @@
     }
     // Проверка причины использования
     if (!comment) {
-        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
+        errorMessage.textContent = "Будь ласка вкажіть причину використання.";
         document.getElementById('comment').style.border = '2px solid red';
         hasError = true;
     } else {
