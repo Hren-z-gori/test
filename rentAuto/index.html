@@ -306,23 +306,38 @@
 
     let hasError = false;
     
-    // Проверка склада
+    // Проверка авто
+    if (!auto) {
+        errorMessage.textContent = "Будь ласка, оберіть спосіб компенсації.";
+        document.getElementById('input_auto').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('input_auto').style.border = '';
+    }
+    // Проверка причины использования
+    if (!comment) {
+        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
+        document.getElementById('comment').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('comment').style.border = '';
+    }
+    // Проверка способа компенсации
     if (!pay || pay === 'Не обрано') {
-        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        errorMessage.textContent = "Будь ласка, оберіть спосіб компенсації.";
         document.getElementById('select_pay').style.border = '2px solid red';
         hasError = true;
     } else {
         document.getElementById('select_pay').style.border = '';
     }
-
-    // Проверка подразделения
+    // Проверка непосредственного руководителля
     if (!curator || curator === 'Не обрано') {
-        errorMessage.textContent = "Будь ласка, оберіть склад.";
+        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
         document.getElementById('select_p_v').style.border = '2px solid red';
         hasError = true;
     } else {
         document.getElementById('select_p_v').style.border = '';
-    }
+    }		
 		    	    
     if (hasError) {
         errorMessage.style.display = 'block';
@@ -330,16 +345,14 @@
     }
 
     // Всё ок — отправляем
-	    
-    	const datetime = new Date(date + "T" + time);
-			const unixtime = Math.floor(datetime.getTime() / 1000);
 
       const params = {
-				unixtime: unixtime,
-        object_id: object_id,
-        agregat_id: agregat_id,
-				object_name: object_name,
-				agregat_name: agregat_name
+		date: date,
+        time: time,  
+        auto: auto,
+        curator: curator,
+		pay: pay,
+		comment: comment
       };
 			Telegram.WebApp.sendData(JSON.stringify(params));
       webviewClose();
