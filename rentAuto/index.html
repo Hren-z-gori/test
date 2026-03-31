@@ -218,7 +218,7 @@
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = `mode=rentAuto&user_id=${userId}`; // параметры POST-запроса в формате строки
+      const params = `mode=order&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
@@ -245,9 +245,7 @@
         		el.value = p;
         		select_p_v.appendChild(el);
       		});
-					// скрываем loader
-					/document.getElementById("loader").style.display = "none";
-					/document.getElementById("content").style.display = "block";         
+          
         }
       };
       xhr.send(params);
@@ -310,7 +308,7 @@
     
     // Проверка авто
     if (!auto) {
-        errorMessage.textContent = "Будь ласка, вкажіть авто.";
+        errorMessage.textContent = "Будь ласка, оберіть спосіб компенсації.";
         document.getElementById('input_auto').style.border = '2px solid red';
         hasError = true;
     } else {
@@ -318,7 +316,7 @@
     }
     // Проверка причины использования
     if (!comment) {
-        errorMessage.textContent = "Будь ласка вкажіть причину використання.";
+        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
         document.getElementById('comment').style.border = '2px solid red';
         hasError = true;
     } else {
