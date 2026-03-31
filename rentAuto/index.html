@@ -248,8 +248,9 @@
         		el.value = p;
         		select_p_v.appendChild(el);
       		});
-			document.getElementById("loader").style.display = "none";
-			document.getElementById("content").style.display = "block";          
+					// скрываем loader
+					document.getElementById("loader").style.display = "none";
+					document.getElementById("content").style.display = "block";         
         }
       };
       xhr.send(params);
