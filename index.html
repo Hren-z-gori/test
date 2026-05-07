@@ -192,24 +192,15 @@
 		⏳ Завантаження данних...
 	</div>
 	<div id="content" style="display:none;">
-      <h1> Заявка на оренду</h1> 
-      <input type="text" id="input_auto" list="select_auto" placeholder = "Автомобіль">
-      <datalist id = "select_auto">
-      </datalist><br><br>
-      <textarea id="comment" placeholder="Причина використання"></textarea>
+      <h1> Запит на погодження</h1> 
+	  <select id = "select_p_v">
+        <option value="Не обрано">На поголження</option>
+      </select><br>
+	  <input id = "files" type = "number" placeholder = "Кількість файлів що додаються><br>
+      <textarea id="comment" placeholder="коментар (за потреби)"></textarea>
       <input id = "date" type = "date" value = "">
       <input id = "time" type = "time"> <br><br>
-      <select id = "select_pay">
-        <option value="Не обрано">Спосіб компенсації</option>
-        <option value="Заправка за власний рахунок" >Заправка за власний рахунок</option>
-        <option value="Утримання із ЗП" >Утримання із ЗП</option>
-		<option value="За рахунок компанії" >За рахунок компанії</option>  
-      </select>
-      <select id = "select_p_v">
-        <option value="Не обрано">Безпосередній керівник</option>
-      </select>
 
-      
       <p id="error-message" style="color: red; display: none;"></p>
       <button onclick="sendData()">Готово</button>
     
@@ -230,16 +221,6 @@
           // если запрос успешно выполнен, обрабатываем ответ
           const response = JSON.parse(xhr.response);
           // заполняем выпадающий список значениями из полученого масива  
-    
-          const select_auto = document.getElementById('select_auto');
-      		const autos = response.autos;
-            
-      		autos.forEach((auto) => {
-       		  const el = document.createElement('option');
-        		el.textContent = auto;
-        		el.value = auto;
-        		select_auto.appendChild(el);
-      		});
           
           const select_p_v = document.getElementById('select_p_v');
       		const ps = response.ps;
@@ -299,9 +280,8 @@
     function sendData() {
     	let date = document.getElementById('date').value;
     	let time = document.getElementById('time').value;
-      let auto = document.getElementById('input_auto').value;
-    	let curator = document.getElementById('select_p_v').value;
-      let pay = document.getElementById('select_pay').value;
+      	let files = document.getElementById('files').value;
+    	let visor = document.getElementById('select_p_v').value;
     	let comment = document.getElementById('comment').value;
 	    
     // Проверка
@@ -311,13 +291,13 @@
 
     let hasError = false;
     
-    // Проверка авто
-    if (!auto) {
+    // Проверка файлов
+    if (!files) {
         errorMessage.textContent = "Будь ласка, вкажіть авто.";
-        document.getElementById('input_auto').style.border = '2px solid red';
+        document.getElementById('files').style.border = '2px solid red';
         hasError = true;
     } else {
-        document.getElementById('input_auto').style.border = '';
+        document.getElementById('files').style.border = '';
     }
     // Проверка причины использования
     if (!comment) {
@@ -327,16 +307,9 @@
     } else {
         document.getElementById('comment').style.border = '';
     }
-    // Проверка способа компенсации
-    if (!pay || pay === 'Не обрано') {
-        errorMessage.textContent = "Будь ласка, оберіть спосіб компенсації.";
-        document.getElementById('select_pay').style.border = '2px solid red';
-        hasError = true;
-    } else {
-        document.getElementById('select_pay').style.border = '';
-    }
-    // Проверка непосредственного руководителля
-    if (!curator || curator === 'Не обрано') {
+
+    // Проверка визируищего 
+    if (!visor || visor === 'Не обрано') {
         errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
         document.getElementById('select_p_v').style.border = '2px solid red';
         hasError = true;
@@ -354,9 +327,8 @@
       const params = {
 		date: date,
         time: time,  
-        auto: auto,
-        curator: curator,
-		pay: pay,
+        files: files,
+        visor: visor,
 		comment: comment
       };
 			Telegram.WebApp.sendData(JSON.stringify(params));
