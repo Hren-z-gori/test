@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html>
+  <html>
+    <head>
 
-<head>
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
-	<meta charset="utf-8">
+		  <meta charset="utf-8">
               <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="MobileOptimized" content="176" />
@@ -185,228 +184,161 @@
         }
 
       </style>
-</head>
 
-<body onload="sendPostRequest()">
+    </head>
+
+    <body onload="sendPostRequest()">
 	<div id="loader" style="padding:20px;text-align:center;">
 		⏳ Завантаження данних...
 	</div>
 	<div id="content" style="display:none;">
-              <h1>  Додати причепне </h1>
-  
-            <div style="height: 220px; " id='agregatLinksAddDialog'>
-                <form id=agregatLinksAddDialogForm method="post">
-                    <div class="frm_box">
+      <h1> Запит на погодження</h1> 
+	  <select id = "select_p_v">
+        <option value="Не обрано">На поголження</option>
+      </select><br>
+	  <input id = "files" type = "number" placeholder = "Кількість файлів що додаються><br>
+      <textarea id="comment" placeholder="коментар (за потреби)"></textarea>
+      <input id = "date" type = "date" value = "">
+      <input id = "time" type = "time"> <br><br>
 
-                        <select id="select_auto" placeholder="Вибір техніки">
-</select><br>
-
-						<select id="select_agregat" placeholder="Вибір агрегату">
-</select><br>
-						
-                        <p>Вибір периоду</p><br>
-                        <input id = "date" type = "date" value = "" readonly>
-                        <input id = "time" type = "time"> <br>
-                    </div>
-                </form>
-            </div>
-		</div>
-            <div class="dialog__button-box">
-                <button onclick="sendData()">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function sendPostRequest() {
-
-	const storage = Telegram.WebApp.DeviceStorage;
-
-	// проверка кеша
-	storage.getItem("selectors_time", function(err, cacheTime) {
-
-		if (!err && cacheTime && Date.now() - Number(cacheTime) < 3600000) { // 1 час
-
-			storage.getItem("objects_selector", function(err1, objects) {
-				storage.getItem("agregat_selector", function(err2, agregat) {
-
-					if (!err1 && !err2 && objects && agregat) {
-
-						document.getElementById("select_auto").innerHTML = objects;
-						document.getElementById("select_agregat").innerHTML = agregat;
-						initSelectors();
-						document.getElementById("loader").style.display = "none";
-						document.getElementById("content").style.display = "block";
-				                      
-						return;
-					}
-
-					makeRequest(); // если кеш повреждён
-
-				});
-			});
-
-		} else {
-			makeRequest(); // кеша нет или устарел
-		}
-
-		function makeRequest() {
-
-			const urlParams = new URLSearchParams(window.location.search);
-			const userId = urlParams.get("user_id");
-
-			const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
-
-			const xhr = new XMLHttpRequest();
-			const params = `mode=addLink&user_id=${userId}`;
-
-			xhr.open('POST', webApp, true);
-			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-			xhr.onreadystatechange = function() {
-
-				if (xhr.readyState === 4 && xhr.status === 200) {
-
-					const response = JSON.parse(xhr.response);
-
-					// кешируем список
-					storage.setItem("objects_selector", response.objects_selector);
-					storage.setItem("agregat_selector", response.agregat_selector);
-					storage.setItem("selectors_time", Date.now());
-
-					// заполняем списки
-					document.getElementById("select_auto").innerHTML = response.objects_selector;
-					document.getElementById("select_agregat").innerHTML = response.agregat_selector;
-					initSelectors();
-					// скрываем loader
-					document.getElementById("loader").style.display = "none";
-					document.getElementById("content").style.display = "block";
-				}
-			};
-
-			xhr.send(params);
-		}
-
-	});
-}
-
-		function initSelectors(){
-
-    		if(!document.getElementById("select_auto").tomselect){
-        		new TomSelect("#select_auto",{
-            		create:false,
-            		sortField:{
-                		field:"text",
-                		direction:"asc"
-            		}
-        		});
-    		}
-
-    		if(!document.getElementById("select_agregat").tomselect){
-        		new TomSelect("#select_agregat",{
-            		create:false
-        		});
-    		}
-
-		}
-        function showCurrentDate() {
-            var data = new Date(),
-                hour = data.getHours().toString().padStart(2, '0');
-            minutes = data.getMinutes().toString().padStart(2, '0');
-            new_value = data.toISOString().slice(0, 10);
-            document.getElementById("date").value = new_value;
-            document.getElementById("time").value = hour + ":" + minutes;
-
+      <p id="error-message" style="color: red; display: none;"></p>
+      <button onclick="sendData()">Готово</button>
+    
+      <script>
+        
+    function sendPostRequest() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("user_id");
+      const webApp = 'https://script.google.com/macros/s/AKfycbyaL43HIOXQUfBy0y--hcfMKIBTIqpmUfvK0tybu3_9xKKpm49biiu1nC-QFoZeOaLNYQ/exec';
+      // отправляем запрос     
+      const xhr = new XMLHttpRequest();
+      const url = webApp; // URL эндпоинта, на который отправляем запрос
+      const params = `mode=vising&user_id=${userId}`; // параметры POST-запроса в формате строки
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          // если запрос успешно выполнен, обрабатываем ответ
+          const response = JSON.parse(xhr.response);
+          // заполняем выпадающий список значениями из полученого масива  
+    
+          const select_auto = document.getElementById('select_auto');
+      		const autos = response.autos;
+            
+          const select_p_v = document.getElementById('select_p_v');
+      		const ps = response.ps;
+      		ps.forEach((p) => {
+       		  const el = document.createElement('option');
+        		el.textContent = p;
+        		el.value = p;
+        		select_p_v.appendChild(el);
+      		});
+          		document.getElementById("loader").style.display = "none";
+				document.getElementById("content").style.display = "block";  
         }
-        showCurrentDate();
+      };
+      xhr.send(params);
+    }
 
-
-		function checkValue(input, listId) {
-    		const datalist = document.getElementById(listId);
-    		const options = datalist.options;
-    		let valFound = false;
-
-    		// Перевіряємо, чи є введене значення серед опцій конкретного списку
-    		for (let i = 0; i < options.length; i++) {
-    		    if (input.value === options[i].value) {
-            		valFound = true;
-           		 break;
-        		}
-    		}
-
- 		   if (!valFound && input.value !== "") {
-  		      Telegram.WebApp.showAlert("Оберіть значення зі списку!");
-  		      input.value = ""; // Очищуємо поле
-  		  }
+		function showCurrentDate(){
+		var data = new Date(),
+			hour = data.getHours().toString().padStart(2, '0');
+      minutes = data.getMinutes().toString().padStart(2, '0');
+      new_value=data.toISOString().slice(0,10);
+			document.getElementById("date").value=new_value;
+      document.getElementById("time").value=hour+":"+minutes;
+			
 		}
-    </script>
-
+		showCurrentDate();
+	</script>
+    
     <script type="application/javascript">
-        Telegram.WebApp.ready();
+    Telegram.WebApp.ready();
 
-        const initData = Telegram.WebApp.initData || '';
-        const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
+    const initData = Telegram.WebApp.initData || '';
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
 
-        Telegram.WebApp.MainButton
-            .setText('CLOSE WEBVIEW')
-            .show()
-            .onClick(function() {
-                webviewClose();
-            });
+    Telegram.WebApp.MainButton
+        .setText('CLOSE WEBVIEW')
+        .show()
+        .onClick(function(){ webviewClose(); });
 
-        Telegram.WebApp.onEvent('themeChanged', function() {
-            document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
-        });
+    Telegram.WebApp.onEvent('themeChanged', function() {
+        document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
+    });
 
-        function showMainButton() {
-            const mainButton = Telegram.WebApp.MainButton;
+    function showMainButton() {
+        const mainButton = Telegram.WebApp.MainButton;
             mainButton.show();
-        }
+    }
 
-        function webviewExpand() {
-            Telegram.WebApp.expand();
-        }
+    function webviewExpand() {
+        Telegram.WebApp.expand();
+    }
 
-        function webviewClose() {
-            Telegram.WebApp.close();
-        }
+    function webviewClose() {
+        Telegram.WebApp.close();
+    }
 
-        function sendData() {
-			let date = document.getElementById('date').value;
-    		let time = document.getElementById('time').value;
-            //const urlParams = new URLSearchParams(window.location.search);
-            //const bot = urlParams.get("bot");
-            let object_id = document.getElementById('select_auto').value;
-            let agregat_id = document.getElementById('select_agregat').value;
-			let select = document.getElementById('select_auto');
-			let object_name = select.options[select.selectedIndex].text;
-			select = document.getElementById('select_agregat');
-			let agregat_name = select.options[select.selectedIndex].text;
-            const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
-			if (!object_id) {
-    			Telegram.WebApp.showAlert("Оберіть техніку");
-    			return;
-			}
-			if (!agregat_id) {
-    			Telegram.WebApp.showAlert("Оберіть агрегат");
-    			return;
-			}
-			//document.querySelector("button").disabled = true;
-			const datetime = new Date(date + "T" + time);
-			const unixtime = Math.floor(datetime.getTime() / 1000);
+    function sendData() {
+    	let date = document.getElementById('date').value;
+    	let time = document.getElementById('time').value;
+      	let files = document.getElementById('files').value;
+    	let visor = document.getElementById('select_p_v').value;
+    	let comment = document.getElementById('comment').value;
+	    
+    // Проверка
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.style.display = 'none';
+    errorMessage.textContent = '';
 
-            const params = {
-				unixtime: unixtime,
-                object_id: object_id,
-                agregat_id: agregat_id,
-				object_name: object_name,
-				agregat_name: agregat_name
-            };
+    let hasError = false;
+    
+    // Проверка файлов
+    if (!files) {
+        errorMessage.textContent = "Будь ласка, вкажіть авто.";
+        document.getElementById('files').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('files').style.border = '';
+    }
+    // Проверка причины использования
+    if (!comment) {
+        errorMessage.textContent = "Будь ласка вкажіть причину використання.";
+        document.getElementById('comment').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('comment').style.border = '';
+    }
+
+    // Проверка визируищего 
+    if (!visor || visor === 'Не обрано') {
+        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
+        document.getElementById('select_p_v').style.border = '2px solid red';
+        hasError = true;
+    } else {
+        document.getElementById('select_p_v').style.border = '';
+    }	
+		    	    
+    if (hasError) {
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Всё ок — отправляем
+
+      const params = {
+		date: date,
+        time: time,  
+        files: files,
+        visor: visor,
+		comment: comment
+      };
 			Telegram.WebApp.sendData(JSON.stringify(params));
-            webviewClose();
-        }
-    </script>
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-</body>
+      webviewClose();
+    }
 
-</html>
+</script>
+    
+    </body>  
+  </html>
