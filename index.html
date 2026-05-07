@@ -209,11 +209,11 @@
     function sendPostRequest() {
       const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get("user_id");
-      const webApp = 'https://script.google.com/macros/s/AKfycbyaL43HIOXQUfBy0y--hcfMKIBTIqpmUfvK0tybu3_9xKKpm49biiu1nC-QFoZeOaLNYQ/exec';
+      const webApp = 'https://script.google.com/macros/s/AKfycbyflLpaZ0n6sNjYsNwuXeadppwn5HlkWsPhKsQ58Ia7sD3tJczhLfIaUyzfuJHIH97tFA/exec';
       // отправляем запрос     
       const xhr = new XMLHttpRequest();
       const url = webApp; // URL эндпоинта, на который отправляем запрос
-      const params = `mode=vising&user_id=${userId}`; // параметры POST-запроса в формате строки
+      const params = `mode=rentAuto&user_id=${userId}`; // параметры POST-запроса в формате строки
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onreadystatechange = function() {
@@ -225,6 +225,13 @@
           const select_auto = document.getElementById('select_auto');
       		const autos = response.autos;
             
+      		autos.forEach((auto) => {
+       		  const el = document.createElement('option');
+        		el.textContent = auto;
+        		el.value = auto;
+        		select_auto.appendChild(el);
+      		});
+          
           const select_p_v = document.getElementById('select_p_v');
       		const ps = response.ps;
       		ps.forEach((p) => {
