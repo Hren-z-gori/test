@@ -198,8 +198,6 @@
       </select><br>
 	  <input id = "files" type = "number" placeholder = "Кількість файлів, що додаються"><br>
       <textarea id="comment" placeholder="коментар (за потреби)"></textarea>
-      <input id = "date" type = "date" value = "">
-      <input id = "time" type = "time"> <br><br>
 
       <p id="error-message" style="color: red; display: none;"></p>
       <button onclick="sendData()">Готово</button>
@@ -236,17 +234,6 @@
       };
       xhr.send(params);
     }
-
-		function showCurrentDate(){
-		var data = new Date(),
-			hour = data.getHours().toString().padStart(2, '0');
-      minutes = data.getMinutes().toString().padStart(2, '0');
-      new_value=data.toISOString().slice(0,10);
-			document.getElementById("date").value=new_value;
-      document.getElementById("time").value=hour+":"+minutes;
-			
-		}
-		showCurrentDate();
 	</script>
     
     <script type="application/javascript">
@@ -278,8 +265,6 @@
     }
 
     function sendData() {
-    	let date = document.getElementById('date').value;
-    	let time = document.getElementById('time').value;
       	let files = document.getElementById('files').value;
     	let visor = document.getElementById('select_p_v').value;
     	let comment = document.getElementById('comment').value;
@@ -316,9 +301,7 @@
 
     // Всё ок — отправляем
 
-      const params = {
-		date: date,
-        time: time,  
+      const params = { 
         files: files,
         visor: visor,
 		comment: comment
