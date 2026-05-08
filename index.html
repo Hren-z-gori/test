@@ -299,14 +299,6 @@
     } else {
         document.getElementById('files').style.border = '';
     }
-    // Проверка причины использования
-    if (!comment) {
-        errorMessage.textContent = "Будь ласка вкажіть причину використання.";
-        document.getElementById('comment').style.border = '2px solid red';
-        hasError = true;
-    } else {
-        document.getElementById('comment').style.border = '';
-    }
 
     // Проверка визируищего 
     if (!visor || visor === 'Не обрано') {
