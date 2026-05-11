@@ -278,7 +278,7 @@
     
     // Проверка файлов
     if (!files) {
-        errorMessage.textContent = "Будь ласка, вкажіть авто.";
+        errorMessage.textContent = "Будь ласка, вкажіть кількість файлів, що додаються.";
         document.getElementById('files').style.border = '2px solid red';
         hasError = true;
     } else {
@@ -287,7 +287,7 @@
 
     // Проверка визируищего 
     if (!visor || visor === 'Не обрано') {
-        errorMessage.textContent = "Будь ласка, оберіть безпосереднього керівника.";
+        errorMessage.textContent = "Будь ласка, оберіть особу для погодження.";
         document.getElementById('select_p_v').style.border = '2px solid red';
         hasError = true;
     } else {
