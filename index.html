@@ -196,7 +196,14 @@
 	  <select id = "select_p_v">
         <option value="Не обрано">На поголження</option>
       </select><br>
-	  <input id = "files" type = "number" placeholder = "Кількість файлів, що додаються"><br>
+	  <input 
+  		id="files" 
+  		type="number" 
+  		min="1" 
+  		step="1" 
+  		onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+  		placeholder="Кількість файлів, що додаються"
+	  ><br>
       <textarea id="comment" placeholder="коментар (за потреби)"></textarea>
 
       <p id="error-message" style="color: red; display: none;"></p>
