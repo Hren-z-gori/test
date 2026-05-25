@@ -383,11 +383,11 @@
 			select = document.getElementById('select_agregat');
 			let agregat_name = select.options[select.selectedIndex].text;
             const webApp = 'https://script.google.com/macros/s/AKfycbx7mi7c0-2h3w4Mnc-M28f6BIydQPXqbyzvM0fA5hupErAh-Pk5gyM6R2MFpJ2gaBA/exec';
-			if (!object_id) {
+			if (!object_id || object_name == "Выбор объекта") {
     			Telegram.WebApp.showAlert("Оберіть техніку");
     			return;
 			}
-			if (!agregat_id) {
+			if (!agregat_id || agregat_name == "Выбор агрегата") {
     			Telegram.WebApp.showAlert("Оберіть агрегат");
     			return;
 			}
